@@ -1,0 +1,24 @@
+### Criar uma nova transação (requer token)
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyfSwiaWF0IjoxNzUxNTYzMjg3LCJleHAiOjE3NTE1NjY4ODd9.uqqAVtv95m_QuKK3wvEId9uGivTsSqwZwj7pqxrmQjE
+POST http://localhost:3001/api/transactions
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "description": "Salário de Julho",
+  "amount": 5000,
+  "type": "receita",
+  "date": "2025-07-05"
+}
+
+###
+
+### Buscar todas as transações (requer token)
+GET http://localhost:3001/api/transactions
+Authorization: Bearer {{token}}
+
+###
+
+### Deletar uma transação pelo ID (requer token)
+DELETE http://localhost:3001/api/transactions/2
+Authorization: Bearer {{token}}
