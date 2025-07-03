@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-C3wGEzNO.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-BC94ymm_.css">
+    <script type="module" crossorigin src="/verdin/assets/index-CoH3USnK.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-CFFRh1Kr.css">
   </head>
 
   <body>
@@ -246,6 +246,52 @@
             <button type="submit" class="btn">Salvar</button>
           </div>
         </form>
+      </div>
+    </div>
+    <div id="delete-confirm-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <svg
+          class="modal-icon warning"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+          />
+        </svg>
+        <h2>Você tem certeza?</h2>
+        <p>
+          Esta ação é **permanente** e irá apagar sua conta e todas as
+          transações associadas. Isso não pode ser desfeito.
+        </p>
+        <div class="form-control">
+          <label for="delete-confirm-input"
+            >Para confirmar, digite "CONFIRMAR" abaixo:</label
+          >
+          <input type="text" id="delete-confirm-input" autocomplete="off" />
+        </div>
+        <div class="modal-actions">
+          <button
+            type="button"
+            id="cancel-delete-account-btn"
+            class="btn-secondary"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="final-delete-btn"
+            class="danger-btn"
+            disabled
+          >
+            Confirmar e Deletar
+          </button>
+        </div>
       </div>
     </div>
   </body>
