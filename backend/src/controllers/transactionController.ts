@@ -45,3 +45,45 @@ export const deleteTransaction = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro no servidor" });
   }
 };
+
+export const updateTransaction = async (req: Request, res: Response) => {
+  const { id } = req.params; // Pega o ID da transação da URL
+  const userId = req.user!.id; // Pega o ID do usuário do token JWT
+  const { description, amount, type, date } = req.body; // Pega os novos dados do corpo da requisição
+
+  // Validação simples para garantir que os dados necessários foram enviados
+  if (!description || !amount || !type || !date) {
+    return res
+      .status(400)
+      .json({ message: "Todos os campos são obrigatórios." });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE transactions 
+       SET description = $1, amount = $2, type = $3, date = $4 
+       WHERE id = $5 AND user_id = $6 
+       RETURNING *`,
+      [description, amount, type, date, id, userId]
+    );
+
+    // A cláusula "AND user_id = $6" é uma camada CRUCIAL de segurança.
+    // Ela garante que um usuário só pode editar uma transação que lhe pertence.
+
+    // Se a consulta não afetou nenhuma linha, significa que a transação não existe ou não pertence ao usuário
+    if (result.rowCount === 0) {
+      return res
+        .status(404)
+        .json({
+          message:
+            "Transação não encontrada ou você não tem permissão para editá-la.",
+        });
+    }
+
+    // Retorna a transação atualizada
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("ERRO AO ATUALIZAR TRANSAÇÃO:", error);
+    res.status(500).json({ message: "Erro no servidor" });
+  }
+};
