@@ -13,6 +13,9 @@ interface Transaction {
 
 // --- Seletores de Elementos do DOM ---
 
+// Adicionamos o seletor da landing page
+const landingView = document.querySelector<HTMLDivElement>("#landing-view")!;
+
 // Elementos principais da interface
 const authView = document.querySelector<HTMLDivElement>("#auth-view")!;
 const appView = document.querySelector<HTMLDivElement>("#app-view")!;
@@ -161,13 +164,19 @@ export const updateSummary = (transactions: Transaction[]): void => {
  * Alterna entre a tela de autenticação e a tela principal do app.
  * @param viewName Nome da view a ser exibida ("auth" ou "app").
  */
-export const showView = (viewName: "auth" | "app"): void => {
-  if (viewName === "app") {
-    authView.classList.add("hidden");
-    appView.classList.remove("hidden");
-  } else {
+export const showView = (viewName: "landing" | "auth" | "app"): void => {
+  // 1. Esconde todas as telas
+  landingView.classList.add("hidden");
+  authView.classList.add("hidden");
+  appView.classList.add("hidden");
+
+  // 2. Mostra apenas a tela correta
+  if (viewName === "landing") {
+    landingView.classList.remove("hidden");
+  } else if (viewName === "auth") {
     authView.classList.remove("hidden");
-    appView.classList.add("hidden");
+  } else if (viewName === "app") {
+    appView.classList.remove("hidden");
   }
 };
 

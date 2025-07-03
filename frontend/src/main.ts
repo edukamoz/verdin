@@ -1,52 +1,87 @@
+// Conteúdo COMPLETO E FINAL de frontend/src/main.ts
+
 import "./style.css";
 import * as auth from "./auth";
 import * as api from "./api";
 import * as ui from "./ui";
 
-/**
- * Inicializa a aplicação após o carregamento do DOM.
- */
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Seletores do DOM ---
-  // Formulários
+// --- ROTEADOR (O CÉREBRO DA NAVEGAÇÃO) ---
+const routes: { [key: string]: () => void | Promise<void> } = {
+  "#/auth": () => ui.showView("auth"),
+  "#/dashboard": () => showDashboard(),
+};
+
+const router = () => {
+  const path = window.location.hash || "#/";
+
+  if (auth.isLoggedIn() && path === "#/auth") {
+    window.location.hash = "#/dashboard";
+    return;
+  }
+
+  const routeHandler = routes[path];
+
+  if (routeHandler) {
+    routeHandler();
+  } else {
+    ui.showView("landing");
+  }
+};
+
+// --- LÓGICA DAS PÁGINAS ---
+const showDashboard = async () => {
+  if (!auth.isLoggedIn()) {
+    window.location.hash = "#/auth";
+    return;
+  }
+
+  ui.showView("app");
+  try {
+    const transactions = await api.getTransactions();
+    ui.renderTransactions(transactions);
+    ui.updateSummary(transactions);
+  } catch (error) {
+    console.error("Sessão inválida ou erro de rede. Deslogando...", error);
+    auth.removeToken();
+    window.location.hash = "#/auth";
+  }
+};
+
+// --- MANIPULADORES DE EVENTOS (HANDLERS) ---
+const setupEventListeners = () => {
   const loginForm = document.querySelector<HTMLFormElement>("#login-form");
   const registerForm =
     document.querySelector<HTMLFormElement>("#register-form");
   const transactionForm =
     document.querySelector<HTMLFormElement>("#transaction-form");
-  const editTransactionForm = document.querySelector<HTMLFormElement>(
-    "#edit-transaction-form"
-  );
-
-  // Botões
   const logoutBtn = document.querySelector<HTMLButtonElement>("#logout-btn");
-  const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
-    "#delete-account-btn"
-  );
-  const finalDeleteBtn =
-    document.querySelector<HTMLButtonElement>("#final-delete-btn")!;
-  const cancelDeleteAccountBtn = document.querySelector<HTMLButtonElement>(
-    "#cancel-delete-account-btn"
-  )!;
-  const closeModalBtn =
-    document.querySelector<HTMLButtonElement>("#close-modal-btn");
-  const cancelEditBtn =
-    document.querySelector<HTMLButtonElement>("#cancel-edit-btn");
-
-  // Tabelas e Modais
   const transactionsTable = document.querySelector<HTMLTableElement>(
     "#transactions-table"
   );
+  const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
+    "#delete-account-btn"
+  );
   const successModal = document.querySelector<HTMLDivElement>("#success-modal");
+  const closeModalBtn =
+    document.querySelector<HTMLButtonElement>("#close-modal-btn");
   const editModal = document.querySelector<HTMLDivElement>("#edit-modal");
-  const deleteConfirmModal = document.querySelector<HTMLDivElement>(
-    "#delete-confirm-modal"
-  )!;
+  const editTransactionForm = document.querySelector<HTMLFormElement>(
+    "#edit-transaction-form"
+  );
+  const cancelEditBtn =
+    document.querySelector<HTMLButtonElement>("#cancel-edit-btn");
+  const finalDeleteBtn =
+    document.querySelector<HTMLButtonElement>("#final-delete-btn");
+  const cancelDeleteAccountBtn = document.querySelector<HTMLButtonElement>(
+    "#cancel-delete-account-btn"
+  );
   const deleteConfirmInput = document.querySelector<HTMLInputElement>(
     "#delete-confirm-input"
-  )!;
+  );
+  const deleteConfirmModal = document.querySelector<HTMLDivElement>(
+    "#delete-confirm-modal"
+  );
 
-  // Verifica se todos os elementos essenciais foram encontrados
   if (
     !loginForm ||
     !registerForm ||
@@ -58,7 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
     !closeModalBtn ||
     !editModal ||
     !editTransactionForm ||
-    !cancelEditBtn
+    !cancelEditBtn ||
+    !finalDeleteBtn ||
+    !cancelDeleteAccountBtn ||
+    !deleteConfirmInput ||
+    !deleteConfirmModal
   ) {
     console.error(
       "Erro crítico: Um ou mais elementos essenciais não foram encontrados no DOM."
@@ -66,35 +105,24 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Funções de Manipulação de Eventos ---
-
-  /**
-   * Manipula o envio do formulário de login.
-   * @param event Evento de envio do formulário.
-   */
-  const handleLoginSubmit = async (event: SubmitEvent) => {
-    event.preventDefault();
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
     ui.clearAuthErrors();
     const data = Object.fromEntries(new FormData(loginForm).entries());
     try {
       const result = await api.loginUser(data);
       auth.saveToken(result.token);
-      await initializeApp();
+      window.location.hash = "#/dashboard";
     } catch (error) {
       ui.displayAuthError("login", (error as Error).message);
     }
-  };
+  });
 
-  /**
-   * Manipula o envio do formulário de registro.
-   * @param event Evento de envio do formulário.
-   */
-  const handleRegisterSubmit = async (event: SubmitEvent) => {
-    event.preventDefault();
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
     ui.clearAuthErrors();
     const data = Object.fromEntries(new FormData(registerForm).entries());
     const password = data.password as string;
-    // Validação de senha
     if (
       password.length < 6 ||
       !/\d/.test(password) ||
@@ -113,43 +141,33 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       ui.displayAuthError("register", (error as Error).message);
     }
-  };
+  });
 
-  /**
-   * Manipula o clique no botão de logout.
-   */
-  const handleLogoutClick = () => {
+  logoutBtn.addEventListener("click", () => {
     auth.removeToken();
-    initializeApp();
-  };
+    window.location.hash = "#/";
+  });
 
-  /**
-   * Manipula o envio do formulário de transação.
-   * @param event Evento de envio do formulário.
-   */
-  const handleTransactionSubmit = async (event: SubmitEvent) => {
-    event.preventDefault();
+  deleteAccountBtn.addEventListener("click", () => ui.openDeleteConfirmModal());
+
+  transactionForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
     const data = Object.fromEntries(new FormData(transactionForm).entries());
     try {
       await api.createTransaction(data);
       transactionForm.reset();
-      await initializeApp();
+      router();
     } catch (error) {
       alert(`Erro ao criar transação: ${(error as Error).message}`);
     }
-  };
+  });
 
-  /**
-   * Manipula cliques na tabela de transações (edição e exclusão).
-   * @param event Evento de clique.
-   */
-  const handleTransactionTableClick = (event: MouseEvent) => {
+  transactionsTable.addEventListener("click", (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const editButton = target.closest(".edit-btn");
     const deleteButton = target.closest(".delete-btn");
 
     if (editButton) {
-      // Abre modal de edição com dados da transação
       const id = parseInt(editButton.getAttribute("data-id")!, 10);
       const description = editButton.getAttribute("data-description")!;
       const amount = editButton.getAttribute("data-amount")!;
@@ -158,32 +176,24 @@ document.addEventListener("DOMContentLoaded", () => {
         | "despesa";
       const date = editButton.getAttribute("data-date")!;
       ui.openEditModal({ id, description, amount, type, date });
-      return;
     }
 
     if (deleteButton) {
-      // Confirma e deleta transação
       const id = parseInt(deleteButton.getAttribute("data-id")!, 10);
       if (confirm("Tem certeza que deseja deletar esta transação?")) {
         api
           .deleteTransaction(id)
-          .then(initializeApp)
+          .then(router)
           .catch((error) => {
             alert(`Erro ao deletar transação: ${(error as Error).message}`);
           });
       }
-      return;
     }
-  };
+  });
 
-  /**
-   * Manipula o envio do formulário de edição de transação.
-   * @param event Evento de envio do formulário.
-   */
-  const handleEditFormSubmit = async (event: SubmitEvent) => {
-    event.preventDefault();
-    const editForm = event.target as HTMLFormElement;
-    const formData = new FormData(editForm);
+  editTransactionForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(editTransactionForm);
     const transactionId = parseInt(formData.get("transactionId") as string, 10);
     const data = {
       description: formData.get("description"),
@@ -194,88 +204,38 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await api.updateTransaction(transactionId, data);
       ui.closeEditModal();
-      await initializeApp();
+      router();
     } catch (error) {
       alert(`Erro ao atualizar transação: ${(error as Error).message}`);
     }
-  };
+  });
 
-  /**
-   * Manipula a exclusão final da conta do usuário.
-   */
-  const handleFinalDelete = async () => {
+  cancelEditBtn.addEventListener("click", ui.closeEditModal);
+
+  closeModalBtn.addEventListener("click", ui.hideSuccessModal);
+  successModal.addEventListener(
+    "click",
+    (e) => e.target === successModal && ui.hideSuccessModal()
+  );
+
+  cancelDeleteAccountBtn.addEventListener("click", ui.closeDeleteConfirmModal);
+  finalDeleteBtn.addEventListener("click", async () => {
     try {
       await api.deleteUserAccount();
       ui.closeDeleteConfirmModal();
       alert("Sua conta foi deletada com sucesso.");
       auth.removeToken();
-      initializeApp();
+      window.location.hash = "#/";
     } catch (error) {
       alert(`Erro ao deletar conta: ${(error as Error).message}`);
     }
-  };
-
-  /**
-   * Habilita o botão de exclusão final apenas se o texto for "CONFIRMAR".
-   */
-  const handleDeleteConfirmInput = () => {
-    finalDeleteBtn.disabled = deleteConfirmInput.value !== "CONFIRMAR";
-  };
-
-  /**
-   * Abre o modal de confirmação de exclusão de conta.
-   */
-  const handleDeleteAccountClick = () => {
-    ui.openDeleteConfirmModal();
-  };
-
-  /**
-   * Função principal de inicialização da aplicação.
-   * Exibe a view correta e carrega as transações se o usuário estiver logado.
-   */
-  const initializeApp = async () => {
-    if (auth.isLoggedIn()) {
-      ui.showView("app");
-      try {
-        const transactions = await api.getTransactions();
-        ui.renderTransactions(transactions);
-        ui.updateSummary(transactions);
-      } catch (error) {
-        console.error("Sessão inválida ou erro de rede. Deslogando...", error);
-        auth.removeToken();
-        initializeApp();
-      }
-    } else {
-      ui.showView("auth");
-    }
-  };
-
-  // --- Anexando os Eventos aos Elementos do DOM ---
-
-  loginForm.addEventListener("submit", handleLoginSubmit);
-  registerForm.addEventListener("submit", handleRegisterSubmit);
-  logoutBtn.addEventListener("click", handleLogoutClick);
-  transactionForm.addEventListener("submit", handleTransactionSubmit);
-  transactionsTable.addEventListener("click", handleTransactionTableClick);
-  closeModalBtn.addEventListener("click", ui.hideSuccessModal);
-  successModal.addEventListener("click", (event) => {
-    if (event.target === successModal) ui.hideSuccessModal();
   });
-  deleteAccountBtn.addEventListener("click", handleDeleteAccountClick);
-  editTransactionForm.addEventListener("submit", handleEditFormSubmit);
-  cancelEditBtn.addEventListener("click", ui.closeEditModal);
-  editModal.addEventListener(
-    "click",
-    (e) => e.target === editModal && ui.closeEditModal()
-  );
-  finalDeleteBtn.addEventListener("click", handleFinalDelete);
-  cancelDeleteAccountBtn.addEventListener("click", ui.closeDeleteConfirmModal);
-  deleteConfirmInput.addEventListener("input", handleDeleteConfirmInput);
-  deleteConfirmModal.addEventListener(
-    "click",
-    (e) => e.target === deleteConfirmModal && ui.closeDeleteConfirmModal()
-  );
+  deleteConfirmInput.addEventListener("input", () => {
+    finalDeleteBtn.disabled = deleteConfirmInput.value !== "CONFIRMAR";
+  });
+};
 
-  // Inicializa a aplicação na primeira carga
-  initializeApp();
-});
+// --- PONTO DE ENTRADA DA APLICAÇÃO ---
+window.addEventListener("load", router);
+window.addEventListener("hashchange", router);
+document.addEventListener("DOMContentLoaded", setupEventListeners);
