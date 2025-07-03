@@ -2,18 +2,21 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/verdin/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-B5JLPMv9.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-BBNUzopB.css">
+    <script type="module" crossorigin src="/verdin/assets/index-CwhQlGkg.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DsvdmAXh.css">
   </head>
 
   <body>
     <div id="app">
       <div id="auth-view">
         <header>
-          <h1>Bem-vindo ao Verdin</h1>
+          <div class="logo-container auth-logo">
+            <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
+            <h1>Seja bem-vindo ao <span class="brand-name">Verdin</span></h1>
+          </div>
           <p>Seu assistente financeiro pessoal.</p>
         </header>
         <div class="form-container">
@@ -67,7 +70,10 @@
 
       <div id="app-view" class="hidden">
         <header class="app-header">
-          <h1>Verdin</h1>
+          <div class="logo-container">
+            <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
+            <h1>Verdin</h1>
+          </div>
           <div class="header-buttons">
             <button id="logout-btn">Sair</button>
             <button id="delete-account-btn" class="danger-btn">
