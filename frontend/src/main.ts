@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector<HTMLDivElement>("#success-modal")!;
   const closeModalBtn =
     document.querySelector<HTMLButtonElement>("#close-modal-btn")!;
+  const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
+    "#delete-account-btn"
+  )!;
 
   // Se algum seletor principal falhar, o erro aparecerá aqui, facilitando a depuração.
   if (
@@ -59,8 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Agora que temos o atributo name, data.password será uma string
     const password = data.password as string;
 
-    // --- NOVA LÓGICA DE VALIDAÇÃO ---
-
     // 1. Regex para verificar se existe pelo menos um número
     const hasNumber = /\d/.test(password);
 
@@ -77,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return; // Interrompe a execução se a senha for inválida
     }
 
-    // --- CORREÇÃO APLICADA AQUI ---
     // Adicionamos a verificação de tipo para garantir que data.password é uma string.
     if (typeof data.password !== "string" || data.password.length < 6) {
       ui.displayAuthError(
@@ -154,6 +154,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const handleDeleteAccountClick = async () => {
+    // Usamos um prompt para uma confirmação forte, evitando cliques acidentais.
+    const confirmation = prompt(
+      'Esta ação é PERMANENTE e irá deletar sua conta e todas as suas transações.\n\nPara confirmar, digite "DELETAR MINHA CONTA":'
+    );
+
+    if (confirmation === "DELETAR MINHA CONTA") {
+      try {
+        await api.deleteUserAccount();
+        alert("Sua conta foi deletada com sucesso.");
+        auth.removeToken();
+        initializeApp(); // Volta para a tela de login
+      } catch (error) {
+        alert(`Erro ao deletar a conta: ${(error as Error).message}`);
+      }
+    } else {
+      alert("Ação cancelada.");
+    }
+  };
+
   // --- Anexando os Eventos ---
 
   loginForm.addEventListener("submit", handleLoginSubmit);
@@ -167,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ui.hideSuccessModal();
     }
   });
+  deleteAccountBtn.addEventListener("click", handleDeleteAccountClick);
 
   // Roda a aplicação pela primeira vez
   initializeApp();

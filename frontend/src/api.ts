@@ -63,3 +63,5 @@ export const createTransaction = (data: object) =>
   });
 export const deleteTransaction = (id: number) =>
   fetchWithAuth(`/api/transactions/${id}`, { method: "DELETE" });
+export const deleteUserAccount = () =>
+  fetchWithAuth("/api/users/me", { method: "DELETE" });

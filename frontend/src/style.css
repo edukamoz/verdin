@@ -301,3 +301,21 @@ section {
   width: auto;
   min-width: 120px;
 }
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.danger-btn {
+  background-color: var(
+    --despesa-color
+  ) !important; /* Usando nossa cor de despesa */
+  color: white !important;
+  border: none;
+}
+
+.danger-btn:hover {
+  background-color: #9b2c2c !important; /* Um vermelho mais escuro no hover */
+}
