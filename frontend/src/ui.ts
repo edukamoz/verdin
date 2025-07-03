@@ -155,9 +155,6 @@ export const hideSuccessModal = (): void => {
 
 // Seletores para o novo modal
 const editModal = document.querySelector<HTMLDivElement>("#edit-modal")!;
-const editForm = document.querySelector<HTMLFormElement>(
-  "#edit-transaction-form"
-)!;
 const editIdInput = document.querySelector<HTMLInputElement>(
   "#edit-transaction-id"
 )!;
