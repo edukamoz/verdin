@@ -240,3 +240,64 @@ section {
 .delete-btn:hover {
   background-color: var(--despesa-color);
 }
+
+/* --- Estilos do Modal de Sucesso --- */
+
+.modal-overlay {
+  position: fixed; /* Fica fixo na tela, mesmo com scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que fique na frente de tudo */
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* A classe .hidden que já usamos, agora com transição para o modal */
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none; /* Impede cliques no modal quando estiver invisível */
+}
+
+.modal-content {
+  background-color: var(--surface-dark);
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  max-width: 400px;
+  width: 90%;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.modal-overlay.hidden .modal-content {
+  transform: scale(0.9);
+}
+
+.modal-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--primary-green);
+  margin: 0 auto 1rem;
+}
+
+.modal-content h2 {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.modal-content .btn {
+  width: auto;
+  min-width: 120px;
+}

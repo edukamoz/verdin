@@ -24,6 +24,7 @@ const saldoTotalEl =
 const loginErrorEl = document.querySelector<HTMLDivElement>("#login-error")!;
 const registerErrorEl =
   document.querySelector<HTMLDivElement>("#register-error")!;
+const successModal = document.querySelector<HTMLDivElement>("#success-modal")!;
 
 // --- Funções Auxiliares de Formatação ---
 const formatCurrency = (value: number): string => {
@@ -118,4 +119,18 @@ export const displayAuthError = (
 export const clearAuthErrors = (): void => {
   loginErrorEl.textContent = "";
   registerErrorEl.textContent = "";
+};
+
+/**
+ * Mostra o modal de sucesso.
+ */
+export const showSuccessModal = (): void => {
+  successModal.classList.remove("hidden");
+};
+
+/**
+ * Esconde o modal de sucesso.
+ */
+export const hideSuccessModal = (): void => {
+  successModal.classList.add("hidden");
 };

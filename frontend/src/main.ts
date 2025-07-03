@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const transactionsTable = document.querySelector<HTMLTableElement>(
     "#transactions-table"
   );
+  const successModal =
+    document.querySelector<HTMLDivElement>("#success-modal")!;
+  const closeModalBtn =
+    document.querySelector<HTMLButtonElement>("#close-modal-btn")!;
 
   // Se algum seletor principal falhar, o erro aparecerá aqui, facilitando a depuração.
   if (
@@ -85,9 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       await api.registerUser(data);
-      alert(
-        "Registro realizado com sucesso! Por favor, faça o login para continuar."
-      );
+      ui.showSuccessModal();
       registerForm.reset();
     } catch (error) {
       ui.displayAuthError("register", (error as Error).message);
@@ -159,6 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
   logoutBtn.addEventListener("click", handleLogoutClick);
   transactionForm.addEventListener("submit", handleTransactionSubmit);
   transactionsTable.addEventListener("click", handleTransactionTableClick);
+  closeModalBtn.addEventListener("click", ui.hideSuccessModal);
+  successModal.addEventListener("click", (event) => {
+    if (event.target === successModal) {
+      ui.hideSuccessModal();
+    }
+  });
 
   // Roda a aplicação pela primeira vez
   initializeApp();
