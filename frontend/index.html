@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verdin - Seu Gestor Financeiro</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="auth-view">
+        <header>
+          <h1>Bem-vindo ao Verdin</h1>
+          <p>Seu assistente financeiro pessoal.</p>
+        </header>
+        <div class="form-container">
+          <form id="login-form">
+            <h2>Login</h2>
+            <div id="login-error" class="error-message"></div>
+            <input
+              type="email"
+              id="login-email"
+              name="email"
+              placeholder="E-mail"
+              required
+            />
+            <input
+              type="password"
+              id="login-password"
+              name="password"
+              placeholder="Senha"
+              required
+            />
+            <button type="submit">Entrar</button>
+          </form>
+          <form id="register-form">
+            <h2>Crie sua Conta</h2>
+            <div id="register-error" class="error-message"></div>
+            <input
+              type="text"
+              id="register-name"
+              name="name"
+              placeholder="Nome"
+              required
+            />
+            <input
+              type="email"
+              id="register-email"
+              name="email"
+              placeholder="E-mail"
+              required
+            />
+            <input
+              type="password"
+              id="register-password"
+              name="password"
+              placeholder="Senha"
+              required
+            />
+            <button type="submit">Registrar</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="app-view" class="hidden">
+        <header class="app-header">
+          <h1>Verdin</h1>
+          <button id="logout-btn">Sair</button>
+        </header>
+        <main>
+          <section id="summary">
+            <div class="summary-card">
+              <h2>Receitas</h2>
+              <p id="total-receitas">R$ 0,00</p>
+            </div>
+            <div class="summary-card">
+              <h2>Despesas</h2>
+              <p id="total-despesas">R$ 0,00</p>
+            </div>
+            <div class="summary-card balance">
+              <h2>Saldo</h2>
+              <p id="saldo-total">R$ 0,00</p>
+            </div>
+          </section>
+
+          <section id="transaction-form-section">
+            <h2>Nova Transação</h2>
+            <form id="transaction-form">
+              <input
+                type="text"
+                id="description"
+                name="description"
+                placeholder="Descrição"
+                required
+              />
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="Valor"
+                step="0.01"
+                required
+              />
+              <input type="date" id="date" name="date" required />
+
+              <div class="radio-group">
+                <div>
+                  <input
+                    type="radio"
+                    id="receita"
+                    name="type"
+                    value="receita"
+                    checked
+                  />
+                  <label for="receita">Receita</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="despesa"
+                    name="type"
+                    value="despesa"
+                  />
+                  <label for="despesa">Despesa</label>
+                </div>
+              </div>
+              <button type="submit" class="btn">Adicionar</button>
+            </form>
+          </section>
+
+          <section id="transactions-section">
+            <h2>Histórico</h2>
+            <table id="transactions-table">
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>Data</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
