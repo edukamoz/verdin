@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-B4uhoOJ1.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-a1DJNvaY.css">
+    <script type="module" crossorigin src="/verdin/assets/index-BE54pDnu.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DIXSvfDH.css">
   </head>
 
   <body>
@@ -17,7 +17,7 @@
           <p>Seu assistente financeiro pessoal.</p>
         </header>
         <div class="form-container">
-          <form id="login-form">
+          <form id="login-form" method="POST">
             <h2>Login</h2>
             <div id="login-error" class="error-message"></div>
             <input
@@ -36,7 +36,7 @@
             />
             <button type="submit">Entrar</button>
           </form>
-          <form id="register-form">
+          <form id="register-form" method="POST">
             <h2>Crie sua Conta</h2>
             <div id="register-error" class="error-message"></div>
             <input
@@ -88,7 +88,7 @@
 
           <section id="transaction-form-section">
             <h2>Nova Transação</h2>
-            <form id="transaction-form">
+            <form id="transaction-form" method="POST">
               <input
                 type="text"
                 id="description"
@@ -146,6 +146,30 @@
             </table>
           </section>
         </main>
+      </div>
+    </div>
+    <div id="success-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <svg
+          class="modal-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+        <h2>Cadastro Realizado!</h2>
+        <p>
+          Sua conta foi criada com sucesso. Agora você pode fazer o login para
+          continuar.
+        </p>
+        <button id="close-modal-btn" class="btn">OK</button>
       </div>
     </div>
   </body>
