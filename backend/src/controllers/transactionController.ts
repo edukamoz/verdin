@@ -22,6 +22,7 @@ export const createTransaction = async (req: Request, res: Response) => {
     );
     res.status(201).json(newTransaction.rows[0]);
   } catch (error) {
+    console.error("ERRO AO CRIAR TRANSAÇÃO:", error);
     res.status(500).json({ message: "Erro no servidor" });
   }
 };
@@ -34,7 +35,6 @@ export const deleteTransaction = async (req: Request, res: Response) => {
       [id, req.user!.id]
     );
     if (result.rowCount === 0) {
-      // A CORREÇÃO ESTÁ AQUI: a palavra "return" foi removida
       res.status(404).json({
         message: "Transação não encontrada ou não pertence ao usuário.",
       });
