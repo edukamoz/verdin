@@ -1,0 +1,6 @@
+<svg width="150" height="150" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Metade Esquerda (Verde Claro) -->
+    <path d="M12 2C12 2 5 6 5 12.5C5 19 12 22 12 22Z" fill="#68D391"/>
+    <!-- Metade Direita (Verde Principal) -->
+    <path d="M12 2C12 2 19 6 19 12.5C19 19 12 22 12 22Z" fill="#48bb78"/>
+</svg>
