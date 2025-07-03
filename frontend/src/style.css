@@ -193,16 +193,23 @@ section {
   color: var(--despesa-color) !important;
 }
 .delete-btn {
-  background-color: var(--despesa-color);
-  color: #fff;
+  background-color: transparent;
   border: none;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  color: var(--despesa-color);
   cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
   transition: background-color 0.2s;
 }
 .delete-btn:hover {
-  background-color: var(--despesa-color);
+  background-color: rgba(245, 101, 101, 0.2);
+}
+.delete-btn svg {
+  width: 20px;
+  height: 20px;
 }
 .modal-overlay {
   position: fixed;
