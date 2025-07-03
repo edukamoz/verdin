@@ -5,13 +5,122 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-CoH3USnK.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-CFFRh1Kr.css">
+    <script type="module" crossorigin src="/verdin/assets/index-DKjyGpba.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DXrc7inI.css">
   </head>
 
   <body>
     <div id="app">
-      <div id="auth-view">
+      <div id="landing-view">
+        <header class="landing-header">
+          <div class="logo-container">
+            <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
+            <span class="landing-brand-name">Verdin</span>
+          </div>
+          <a href="#/auth" class="btn btn-primary">Acessar Plataforma</a>
+        </header>
+
+        <main class="landing-main">
+          <section class="hero-section">
+            <h1 class="hero-title">
+              O controle financeiro, finalmente simplificado.
+            </h1>
+            <p class="hero-subtitle">
+              Com o Verdin, organizar suas receitas e despesas se torna uma
+              tarefa fácil e intuitiva. Tenha uma visão clara para onde seu
+              dinheiro vai e alcance seus objetivos.
+            </p>
+            <a href="#/auth" class="btn btn-primary btn-large"
+              >Comece a usar gratuitamente</a
+            >
+          </section>
+
+          <section class="features-section">
+            <h2>Tudo que você precisa em um só lugar</h2>
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0M3.75 18H7.5M4.5 12h15m-15 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0"
+                    />
+                  </svg>
+                </div>
+                <h3>Controle Total</h3>
+                <p>
+                  Cadastre todas as suas receitas e despesas de forma rápida,
+                  com data, descrição e tipo.
+                </p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+                    />
+                  </svg>
+                </div>
+                <h3>Visão Clara</h3>
+                <p>
+                  Com o painel principal, você sempre sabe o balanço atual, o
+                  total de entradas e saídas do mês.
+                </p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286Z"
+                    />
+                  </svg>
+                </div>
+                <h3>Seguro e Pessoal</h3>
+                <p>
+                  Seus dados são protegidos. Cada usuário só tem acesso às suas
+                  próprias informações financeiras.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="cta-section">
+            <h2>Pronto para organizar sua vida financeira?</h2>
+            <a href="#/auth" class="btn btn-primary btn-large"
+              >Criar minha conta agora</a
+            >
+          </section>
+        </main>
+
+        <footer class="landing-footer">
+          <p>&copy; 2025 Verdin. Desenvolvido por Eduardo Kamo.</p>
+        </footer>
+      </div>
+
+      <div id="auth-view" class="hidden">
         <header>
           <div class="logo-container auth-logo">
             <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
