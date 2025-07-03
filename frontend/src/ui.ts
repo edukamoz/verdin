@@ -44,10 +44,10 @@ const formatDate = (dateString: string): string => {
  * Limpa e renderiza a tabela de transações com os dados fornecidos.
  */
 export const renderTransactions = (transactions: Transaction[]): void => {
-  transactionsTableBody.innerHTML = ""; // Limpa a tabela antes de adicionar novas linhas
+  transactionsTableBody.innerHTML = "";
 
   if (transactions.length === 0) {
-    transactionsTableBody.innerHTML = `<tr><td colspan="4">Nenhuma transação encontrada.</td></tr>`;
+    transactionsTableBody.innerHTML = `<tr><td colspan="5">Nenhuma transação encontrada.</td></tr>`;
     return;
   }
 
@@ -55,6 +55,14 @@ export const renderTransactions = (transactions: Transaction[]): void => {
     const tr = document.createElement("tr");
     const isReceita = transaction.type === "receita";
 
+    // O ícone de lápis em SVG
+    const editIcon = `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+      </svg>
+    `;
+
+    // Agora a última célula da tabela terá os dois botões
     tr.innerHTML = `
       <td>${transaction.description}</td>
       <td class="${isReceita ? "receita" : "despesa"}">${formatCurrency(
@@ -62,7 +70,17 @@ export const renderTransactions = (transactions: Transaction[]): void => {
     )}</td>
       <td>${formatDate(transaction.date)}</td>
       <td>
-        <button class="delete-btn" data-id="${transaction.id}">Excluir</button>
+        <button class="edit-btn" title="Editar" 
+          data-id="${transaction.id}"
+          data-description="${transaction.description}"
+          data-amount="${transaction.amount}"
+          data-type="${transaction.type}"
+          data-date="${transaction.date.split("T")[0]}">
+          ${editIcon}
+        </button>
+        <button class="delete-btn" title="Excluir" data-id="${
+          transaction.id
+        }">X</button>
       </td>
     `;
     transactionsTableBody.appendChild(tr);
@@ -133,4 +151,42 @@ export const showSuccessModal = (): void => {
  */
 export const hideSuccessModal = (): void => {
   successModal.classList.add("hidden");
+};
+
+// Seletores para o novo modal
+const editModal = document.querySelector<HTMLDivElement>("#edit-modal")!;
+const editForm = document.querySelector<HTMLFormElement>(
+  "#edit-transaction-form"
+)!;
+const editIdInput = document.querySelector<HTMLInputElement>(
+  "#edit-transaction-id"
+)!;
+const editDescriptionInput =
+  document.querySelector<HTMLInputElement>("#edit-description")!;
+const editAmountInput =
+  document.querySelector<HTMLInputElement>("#edit-amount")!;
+const editDateInput = document.querySelector<HTMLInputElement>("#edit-date")!;
+
+/**
+ * Preenche o formulário de edição com os dados da transação e exibe o modal.
+ */
+export const openEditModal = (transaction: Transaction) => {
+  editIdInput.value = transaction.id.toString();
+  editDescriptionInput.value = transaction.description;
+  editAmountInput.value = parseFloat(transaction.amount).toFixed(2);
+  editDateInput.value = transaction.date.split("T")[0]; // Formato YYYY-MM-DD
+
+  // Marca o radio button correto (receita ou despesa)
+  document.querySelector<HTMLInputElement>(
+    `input[name="type"][value="${transaction.type}"]`
+  )!.checked = true;
+
+  editModal.classList.remove("hidden");
+};
+
+/**
+ * Esconde o modal de edição.
+ */
+export const closeEditModal = () => {
+  editModal.classList.add("hidden");
 };

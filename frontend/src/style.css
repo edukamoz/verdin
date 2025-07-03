@@ -1,49 +1,41 @@
-/* 1. Definição da nossa paleta de cores "Verdin Dark" com variáveis CSS */
 :root {
-  --background-dark: #1a202c; /* Um cinza-azulado bem escuro */
-  --surface-dark: #2d3748; /* Um cinza mais claro para os cards */
-  --primary-green: #48bb78; /* Nosso verde principal, vibrante e moderno */
-  --text-primary: #edf2f7; /* Branco suave para textos principais */
-  --text-secondary: #a0aec0; /* Cinza claro para labels e subtítulos */
-  --border-color: #4a5568; /* Cor sutil para as bordas */
-  --receita-color: #68d391; /* Um verde claro e legível para valores de receita */
-  --despesa-color: #f56565; /* Um vermelho suave para valores de despesa */
+  --background-dark: #1a202c;
+  --surface-dark: #2d3748;
+  --primary-green: #48bb78;
+  --text-primary: #edf2f7;
+  --text-secondary: #a0aec0;
+  --border-color: #4a5568;
+  --receita-color: #68d391;
+  --despesa-color: #f56565;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --warning-color: #f59e0b;
 }
-
-/* 2. Reset e Estilos Globais */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
 }
-
 body {
   background-color: var(--background-dark);
   color: var(--text-primary);
   line-height: 1.6;
 }
-
 .hidden {
   display: none !important;
 }
-
-/* 3. Estilos da Tela de Autenticação */
 #auth-view {
   max-width: 800px;
   margin: 4rem auto;
   text-align: center;
 }
-
 #auth-view h1 {
   color: var(--text-primary);
+  font-size: 1.75rem;
 }
-
 #auth-view p {
   color: var(--text-secondary);
 }
-
 .form-container {
   display: flex;
   flex-wrap: wrap;
@@ -51,7 +43,6 @@ body {
   margin-top: 2rem;
   justify-content: center;
 }
-
 #auth-view form {
   background: var(--surface-dark);
   padding: 2rem;
@@ -62,12 +53,10 @@ body {
   max-width: 400px;
   text-align: left;
 }
-
 #auth-view form h2 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
-
 #auth-view input {
   width: 100%;
   padding: 0.75rem;
@@ -77,7 +66,6 @@ body {
   color: var(--text-primary);
   border-radius: 4px;
 }
-
 #auth-view button,
 .btn {
   width: 100%;
@@ -89,24 +77,19 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s;
 }
-
 #auth-view button:hover,
 .btn:hover {
-  background-color: #38a169; /* Um verde um pouco mais escuro no hover */
+  background-color: #38a169;
 }
-
 .error-message {
   color: var(--despesa-color);
   margin-bottom: 1rem;
   text-align: center;
   font-size: 0.9rem;
-  height: 1.2em; /* Garante que o layout não pule quando o erro aparece */
+  height: 1.2em;
 }
-
-/* 4. Estilos da Tela Principal da App */
-
 .app-header {
   background-color: var(--surface-dark);
   padding: 1rem 2rem;
@@ -115,11 +98,9 @@ body {
   align-items: center;
   border-bottom: 1px solid var(--border-color);
 }
-
 .app-header h1 {
   color: var(--primary-green);
 }
-
 #logout-btn {
   background: transparent;
   border: 1px solid var(--primary-green);
@@ -129,18 +110,15 @@ body {
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
-
 #logout-btn:hover {
   background-color: var(--primary-green);
   color: var(--surface-dark);
 }
-
 main {
   max-width: 800px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
-
 section {
   background-color: var(--surface-dark);
   padding: 1.5rem;
@@ -148,13 +126,11 @@ section {
   border: 1px solid var(--border-color);
   margin-bottom: 2rem;
 }
-
 #summary {
   display: flex;
   justify-content: space-around;
   gap: 1rem;
 }
-
 .summary-card {
   text-align: center;
   flex: 1;
@@ -167,17 +143,14 @@ section {
   font-size: 1.5rem;
   font-weight: 600;
 }
-
 #transaction-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-
 #transaction-form #description {
-  grid-column: 1 / -1; /* Ocupa a linha inteira */
+  grid-column: 1/-1;
 }
-
 #transaction-form input,
 #transaction-form .radio-group {
   padding: 0.75rem;
@@ -186,7 +159,6 @@ section {
   color: var(--text-primary);
   border-radius: 4px;
 }
-
 .radio-group {
   display: flex;
   gap: 1rem;
@@ -194,76 +166,62 @@ section {
   justify-content: center;
   border: 1px solid var(--border-color);
 }
-
 #transaction-form .btn {
-  grid-column: 1 / -1; /* Ocupa a linha inteira */
+  grid-column: 1/-1;
 }
-
 #transactions-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
 }
-
 #transactions-table th,
 #transactions-table td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
 }
-
 #transactions-table th {
   color: var(--text-secondary);
 }
-
 #transactions-table td:first-child {
   font-weight: 600;
 }
-
 .receita {
   color: var(--receita-color) !important;
 }
 .despesa {
   color: var(--despesa-color) !important;
 }
-
 .delete-btn {
-  background-color: #7f1d1d;
-  color: white;
+  background-color: var(--despesa-color);
+  color: #fff;
   border: none;
   padding: 0.5rem 0.75rem;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .delete-btn:hover {
   background-color: var(--despesa-color);
 }
-
-/* --- Estilos do Modal de Sucesso --- */
-
 .modal-overlay {
-  position: fixed; /* Fica fixo na tela, mesmo com scroll */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Garante que fique na frente de tudo */
+  z-index: 1000;
   opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s;
 }
-
-/* A classe .hidden que já usamos, agora com transição para o modal */
 .modal-overlay.hidden {
   opacity: 0;
-  pointer-events: none; /* Impede cliques no modal quando estiver invisível */
+  pointer-events: none;
 }
-
 .modal-content {
   background-color: var(--surface-dark);
   padding: 2rem 3rem;
@@ -273,42 +231,34 @@ section {
   max-width: 400px;
   width: 90%;
   transform: scale(1);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s;
 }
-
 .modal-overlay.hidden .modal-content {
   transform: scale(0.9);
 }
-
 .modal-icon {
   width: 80px;
   height: 80px;
   color: var(--primary-green);
   margin: 0 auto 1rem;
 }
-
 .modal-content h2 {
   margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
-
 .modal-content p {
   margin-bottom: 1.5rem;
   color: var(--text-secondary);
 }
-
 .modal-content .btn {
   width: auto;
   min-width: 120px;
 }
-
 .header-buttons {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
-
-/* Estilo base para os botões do cabeçalho */
 #logout-btn,
 .danger-btn {
   background: transparent;
@@ -318,54 +268,99 @@ section {
   font-weight: 600;
   transition: background-color 0.2s, color 0.2s;
 }
-
-/* Estilo específico do botão de Logout */
 #logout-btn {
   border: 1px solid var(--primary-green);
   color: var(--primary-green);
 }
-
 #logout-btn:hover {
   background-color: var(--primary-green);
   color: var(--surface-dark);
 }
-
-/* Estilo específico do botão de Deletar (perigo) */
 .danger-btn {
   border: 1px solid var(--despesa-color);
   color: var(--despesa-color);
 }
-
 .danger-btn:hover {
   background-color: var(--despesa-color);
   color: var(--text-primary);
 }
-
-/* --- Estilos da Logo e Marca --- */
-
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* Espaço entre a logo e o texto */
+  gap: 0.75rem;
 }
-
 .logo-img {
   width: 40px;
   height: 40px;
 }
-
-/* Centraliza a logo na tela de autenticação */
 .auth-logo {
   justify-content: center;
   margin-bottom: 0.5rem;
 }
-
-/* Deixa o H1 da tela de autenticação alinhado com o restante */
-#auth-view h1 {
-  font-size: 1.75rem;
-}
-
-/* Deixa o nome "Verdin" em verde */
 .brand-name {
   color: var(--primary-green);
+}
+.edit-btn {
+  background: transparent;
+  border: none;
+  color: var(--warning-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+.edit-btn:hover {
+  background-color: rgba(245, 158, 11, 0.2);
+}
+.edit-btn svg {
+  width: 20px;
+  height: 20px;
+}
+#transactions-table td:last-child {
+  display: flex;
+  gap: 0.5rem;
+}
+#edit-transaction-form .form-control {
+  margin-bottom: 1rem;
+}
+#edit-transaction-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+#edit-transaction-form input[type="text"],
+#edit-transaction-form input[type="number"],
+#edit-transaction-form input[type="date"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: space-between;
+}
+.modal-actions .btn-secondary {
+  background-color: var(--despesa-color);
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.modal-actions .btn-secondary:hover {
+  background-color: #9b2c2c;
 }

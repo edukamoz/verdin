@@ -4,7 +4,7 @@ import * as api from "./api";
 import * as ui from "./ui";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Seletores de Elementos do DOM ---
+  // --- Seletores do DOM ---
   const loginForm = document.querySelector<HTMLFormElement>("#login-form");
   const registerForm =
     document.querySelector<HTMLFormElement>("#register-form");
@@ -14,13 +14,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const transactionsTable = document.querySelector<HTMLTableElement>(
     "#transactions-table"
   );
-  const successModal =
-    document.querySelector<HTMLDivElement>("#success-modal")!;
-  const closeModalBtn =
-    document.querySelector<HTMLButtonElement>("#close-modal-btn")!;
   const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
     "#delete-account-btn"
-  )!;
+  );
+
+  // Seletores do Modal de Sucesso
+  const successModal = document.querySelector<HTMLDivElement>("#success-modal");
+  const closeModalBtn =
+    document.querySelector<HTMLButtonElement>("#close-modal-btn");
+
+  // Seletores do Modal de Edição
+  const editModal = document.querySelector<HTMLDivElement>("#edit-modal");
+  const editTransactionForm = document.querySelector<HTMLFormElement>(
+    "#edit-transaction-form"
+  );
+  const cancelEditBtn =
+    document.querySelector<HTMLButtonElement>("#cancel-edit-btn");
 
   // Se algum seletor principal falhar, o erro aparecerá aqui, facilitando a depuração.
   if (
@@ -28,12 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
     !registerForm ||
     !transactionForm ||
     !logoutBtn ||
-    !transactionsTable
+    !transactionsTable ||
+    !deleteAccountBtn ||
+    !successModal ||
+    !closeModalBtn ||
+    !editModal ||
+    !editTransactionForm ||
+    !cancelEditBtn
   ) {
     console.error(
-      "Erro crítico: Um ou mais elementos essenciais não foram encontrados no DOM. Verifique os IDs no seu index.html."
+      "Erro crítico: Um ou mais elementos essenciais não foram encontrados no DOM."
     );
-    return; // Interrompe a execução se algum elemento vital estiver faltando.
+    return;
   }
 
   // --- Manipuladores de Eventos ---
@@ -41,9 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const handleLoginSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     ui.clearAuthErrors();
-    const formData = new FormData(loginForm);
-    const data = Object.fromEntries(formData.entries());
-
+    const data = Object.fromEntries(new FormData(loginForm).entries());
     try {
       const result = await api.loginUser(data);
       auth.saveToken(result.token);
@@ -56,37 +69,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const handleRegisterSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     ui.clearAuthErrors();
-    const formData = new FormData(registerForm);
-    const data = Object.fromEntries(formData.entries());
-
-    // Agora que temos o atributo name, data.password será uma string
+    const data = Object.fromEntries(new FormData(registerForm).entries());
     const password = data.password as string;
-
-    // 1. Regex para verificar se existe pelo menos um número
-    const hasNumber = /\d/.test(password);
-
-    // 2. Regex para verificar se existe pelo menos um caractere especial
-    // O conjunto [!@#$%^&*(),.?":{}|<>] é um exemplo, pode ser customizado.
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    // 3. Verificação completa
-    if (password.length < 6 || !hasNumber || !hasSpecialChar) {
+    if (
+      password.length < 6 ||
+      !/\d/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
       ui.displayAuthError(
         "register",
         "A senha deve ter no mínimo 6 caracteres, um número e um caractere especial."
       );
-      return; // Interrompe a execução se a senha for inválida
-    }
-
-    // Adicionamos a verificação de tipo para garantir que data.password é uma string.
-    if (typeof data.password !== "string" || data.password.length < 6) {
-      ui.displayAuthError(
-        "register",
-        "A senha deve ser informada e ter no mínimo 6 caracteres."
-      );
       return;
     }
-
     try {
       await api.registerUser(data);
       ui.showSuccessModal();
@@ -103,14 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const handleTransactionSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
-    const formData = new FormData(transactionForm);
-    const data = {
-      description: formData.get("description"),
-      amount: formData.get("amount"),
-      date: formData.get("date"),
-      type: formData.get("type"),
-    };
-
+    const data = Object.fromEntries(new FormData(transactionForm).entries());
     try {
       await api.createTransaction(data);
       transactionForm.reset();
@@ -120,18 +108,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const handleTransactionTableClick = async (event: MouseEvent) => {
+  const handleTransactionTableClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.classList.contains("delete-btn")) {
-      const id = target.getAttribute("data-id");
-      if (id && confirm("Tem certeza que deseja deletar esta transação?")) {
-        try {
-          await api.deleteTransaction(parseInt(id, 10));
-          await initializeApp();
-        } catch (error) {
-          alert(`Erro ao deletar transação: ${(error as Error).message}`);
-        }
+    const editButton = target.closest(".edit-btn");
+    const deleteButton = target.closest(".delete-btn");
+
+    if (editButton) {
+      const id = parseInt(editButton.getAttribute("data-id")!, 10);
+      const description = editButton.getAttribute("data-description")!;
+      const amount = editButton.getAttribute("data-amount")!;
+      const type = editButton.getAttribute("data-type") as
+        | "receita"
+        | "despesa";
+      const date = editButton.getAttribute("data-date")!;
+      ui.openEditModal({ id, description, amount, type, date });
+      return;
+    }
+
+    if (deleteButton) {
+      const id = parseInt(deleteButton.getAttribute("data-id")!, 10);
+      if (confirm("Tem certeza que deseja deletar esta transação?")) {
+        api
+          .deleteTransaction(id)
+          .then(initializeApp)
+          .catch((error) => {
+            alert(`Erro ao deletar transação: ${(error as Error).message}`);
+          });
       }
+      return;
+    }
+  };
+
+  // Handler para o formulário de edição
+  const handleEditFormSubmit = async (event: SubmitEvent) => {
+    event.preventDefault();
+    const editForm = event.target as HTMLFormElement;
+    const formData = new FormData(editForm);
+    const transactionId = parseInt(formData.get("transactionId") as string, 10);
+    const data = {
+      description: formData.get("description"),
+      amount: formData.get("amount"),
+      date: formData.get("date"),
+      type: formData.get("type"),
+    };
+    try {
+      await api.updateTransaction(transactionId, data);
+      ui.closeEditModal();
+      await initializeApp();
+    } catch (error) {
+      alert(`Erro ao atualizar transação: ${(error as Error).message}`);
     }
   };
 
@@ -188,6 +213,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   deleteAccountBtn.addEventListener("click", handleDeleteAccountClick);
+  editTransactionForm.addEventListener("submit", handleEditFormSubmit);
+  cancelEditBtn.addEventListener("click", ui.closeEditModal);
+  editModal.addEventListener(
+    "click",
+    (e) => e.target === editModal && ui.closeEditModal()
+  );
 
   // Roda a aplicação pela primeira vez
   initializeApp();
