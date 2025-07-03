@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { registerUser, loginUser } from "../controllers/userController";
+import { protect } from "../middlewares/authMiddleware";
+import {
+  registerUser,
+  loginUser,
+  deleteCurrentUser,
+} from "../controllers/userController";
 
 const router = Router();
 
@@ -85,5 +90,21 @@ router.post("/register", registerUser);
  *         description: Credenciais inválidas.
  */
 router.post("/login", loginUser);
+
+/**
+ * @swagger
+ * /api/users/me:
+ * delete:
+ * summary: Deleta o usuário autenticado e todos os seus dados
+ * tags: [Users]
+ * security:
+ * - bearerAuth: []
+ * responses:
+ * 200:
+ * description: Usuário deletado com sucesso.
+ * 401:
+ * description: Não autorizado.
+ */
+router.delete("/me", protect, deleteCurrentUser);
 
 export default router;

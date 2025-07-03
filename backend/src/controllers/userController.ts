@@ -61,3 +61,31 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro no servidor" });
   }
 };
+
+export const deleteCurrentUser = async (req: Request, res: Response) => {
+  // O middleware 'protect' já nos deu o ID do usuário em req.user
+  const userId = req.user!.id;
+
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ message: "ID do usuário não encontrado no token." });
+  }
+
+  try {
+    // Graças ao "ON DELETE CASCADE" no nosso banco de dados,
+    // deletar o usuário aqui irá automaticamente deletar todas as suas transações.
+    await pool.query("DELETE FROM users WHERE id = $1", [userId]);
+
+    res
+      .status(200)
+      .json({
+        message: "Usuário e todos os seus dados foram deletados com sucesso.",
+      });
+  } catch (error) {
+    console.error("ERRO AO DELETAR USUÁRIO:", error);
+    res
+      .status(500)
+      .json({ message: "Erro no servidor ao tentar deletar o usuário." });
+  }
+};
