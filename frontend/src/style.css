@@ -340,3 +340,32 @@ section {
   background-color: var(--despesa-color);
   color: var(--text-primary);
 }
+
+/* --- Estilos da Logo e Marca --- */
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Espaço entre a logo e o texto */
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Centraliza a logo na tela de autenticação */
+.auth-logo {
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Deixa o H1 da tela de autenticação alinhado com o restante */
+#auth-view h1 {
+  font-size: 1.75rem;
+}
+
+/* Deixa o nome "Verdin" em verde */
+.brand-name {
+  color: var(--primary-green);
+}
