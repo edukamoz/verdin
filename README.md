@@ -43,8 +43,6 @@ O objetivo foi construir uma aplicação completa e robusta, utilizando tecnolog
 
 ### 🖼️ Visualização do Projeto
 
-_(Dica: Grave um GIF curto ou tire screenshots da sua aplicação para colocar aqui!)_
-
 **Landing Page**
 ![Landing Page do Verdin](/docs/images/landing-page.gif)
 
