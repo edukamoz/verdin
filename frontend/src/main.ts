@@ -3,35 +3,50 @@ import * as auth from "./auth";
 import * as api from "./api";
 import * as ui from "./ui";
 
+/**
+ * Inicializa a aplicação após o carregamento do DOM.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   // --- Seletores do DOM ---
+  // Formulários
   const loginForm = document.querySelector<HTMLFormElement>("#login-form");
   const registerForm =
     document.querySelector<HTMLFormElement>("#register-form");
   const transactionForm =
     document.querySelector<HTMLFormElement>("#transaction-form");
-  const logoutBtn = document.querySelector<HTMLButtonElement>("#logout-btn");
-  const transactionsTable = document.querySelector<HTMLTableElement>(
-    "#transactions-table"
-  );
-  const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
-    "#delete-account-btn"
-  );
-
-  // Seletores do Modal de Sucesso
-  const successModal = document.querySelector<HTMLDivElement>("#success-modal");
-  const closeModalBtn =
-    document.querySelector<HTMLButtonElement>("#close-modal-btn");
-
-  // Seletores do Modal de Edição
-  const editModal = document.querySelector<HTMLDivElement>("#edit-modal");
   const editTransactionForm = document.querySelector<HTMLFormElement>(
     "#edit-transaction-form"
   );
+
+  // Botões
+  const logoutBtn = document.querySelector<HTMLButtonElement>("#logout-btn");
+  const deleteAccountBtn = document.querySelector<HTMLButtonElement>(
+    "#delete-account-btn"
+  );
+  const finalDeleteBtn =
+    document.querySelector<HTMLButtonElement>("#final-delete-btn")!;
+  const cancelDeleteAccountBtn = document.querySelector<HTMLButtonElement>(
+    "#cancel-delete-account-btn"
+  )!;
+  const closeModalBtn =
+    document.querySelector<HTMLButtonElement>("#close-modal-btn");
   const cancelEditBtn =
     document.querySelector<HTMLButtonElement>("#cancel-edit-btn");
 
-  // Se algum seletor principal falhar, o erro aparecerá aqui, facilitando a depuração.
+  // Tabelas e Modais
+  const transactionsTable = document.querySelector<HTMLTableElement>(
+    "#transactions-table"
+  );
+  const successModal = document.querySelector<HTMLDivElement>("#success-modal");
+  const editModal = document.querySelector<HTMLDivElement>("#edit-modal");
+  const deleteConfirmModal = document.querySelector<HTMLDivElement>(
+    "#delete-confirm-modal"
+  )!;
+  const deleteConfirmInput = document.querySelector<HTMLInputElement>(
+    "#delete-confirm-input"
+  )!;
+
+  // Verifica se todos os elementos essenciais foram encontrados
   if (
     !loginForm ||
     !registerForm ||
@@ -51,8 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Manipuladores de Eventos ---
+  // --- Funções de Manipulação de Eventos ---
 
+  /**
+   * Manipula o envio do formulário de login.
+   * @param event Evento de envio do formulário.
+   */
   const handleLoginSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     ui.clearAuthErrors();
@@ -66,11 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  /**
+   * Manipula o envio do formulário de registro.
+   * @param event Evento de envio do formulário.
+   */
   const handleRegisterSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     ui.clearAuthErrors();
     const data = Object.fromEntries(new FormData(registerForm).entries());
     const password = data.password as string;
+    // Validação de senha
     if (
       password.length < 6 ||
       !/\d/.test(password) ||
@@ -91,11 +115,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  /**
+   * Manipula o clique no botão de logout.
+   */
   const handleLogoutClick = () => {
     auth.removeToken();
     initializeApp();
   };
 
+  /**
+   * Manipula o envio do formulário de transação.
+   * @param event Evento de envio do formulário.
+   */
   const handleTransactionSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(transactionForm).entries());
@@ -108,12 +139,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  /**
+   * Manipula cliques na tabela de transações (edição e exclusão).
+   * @param event Evento de clique.
+   */
   const handleTransactionTableClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const editButton = target.closest(".edit-btn");
     const deleteButton = target.closest(".delete-btn");
 
     if (editButton) {
+      // Abre modal de edição com dados da transação
       const id = parseInt(editButton.getAttribute("data-id")!, 10);
       const description = editButton.getAttribute("data-description")!;
       const amount = editButton.getAttribute("data-amount")!;
@@ -126,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (deleteButton) {
+      // Confirma e deleta transação
       const id = parseInt(deleteButton.getAttribute("data-id")!, 10);
       if (confirm("Tem certeza que deseja deletar esta transação?")) {
         api
@@ -139,7 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Handler para o formulário de edição
+  /**
+   * Manipula o envio do formulário de edição de transação.
+   * @param event Evento de envio do formulário.
+   */
   const handleEditFormSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
     const editForm = event.target as HTMLFormElement;
@@ -160,8 +200,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // --- Função Principal de Inicialização ---
+  /**
+   * Manipula a exclusão final da conta do usuário.
+   */
+  const handleFinalDelete = async () => {
+    try {
+      await api.deleteUserAccount();
+      ui.closeDeleteConfirmModal();
+      alert("Sua conta foi deletada com sucesso.");
+      auth.removeToken();
+      initializeApp();
+    } catch (error) {
+      alert(`Erro ao deletar conta: ${(error as Error).message}`);
+    }
+  };
 
+  /**
+   * Habilita o botão de exclusão final apenas se o texto for "CONFIRMAR".
+   */
+  const handleDeleteConfirmInput = () => {
+    finalDeleteBtn.disabled = deleteConfirmInput.value !== "CONFIRMAR";
+  };
+
+  /**
+   * Abre o modal de confirmação de exclusão de conta.
+   */
+  const handleDeleteAccountClick = () => {
+    ui.openDeleteConfirmModal();
+  };
+
+  /**
+   * Função principal de inicialização da aplicação.
+   * Exibe a view correta e carrega as transações se o usuário estiver logado.
+   */
   const initializeApp = async () => {
     if (auth.isLoggedIn()) {
       ui.showView("app");
@@ -172,34 +243,14 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Sessão inválida ou erro de rede. Deslogando...", error);
         auth.removeToken();
-        initializeApp(); // Chama a si mesma para re-renderizar a tela de auth
+        initializeApp();
       }
     } else {
       ui.showView("auth");
     }
   };
 
-  const handleDeleteAccountClick = async () => {
-    // Usamos um prompt para uma confirmação forte, evitando cliques acidentais.
-    const confirmation = prompt(
-      'Esta ação é PERMANENTE e irá deletar sua conta e todas as suas transações.\n\nPara confirmar, digite "DELETAR MINHA CONTA":'
-    );
-
-    if (confirmation === "DELETAR MINHA CONTA") {
-      try {
-        await api.deleteUserAccount();
-        alert("Sua conta foi deletada com sucesso.");
-        auth.removeToken();
-        initializeApp(); // Volta para a tela de login
-      } catch (error) {
-        alert(`Erro ao deletar a conta: ${(error as Error).message}`);
-      }
-    } else {
-      alert("Ação cancelada.");
-    }
-  };
-
-  // --- Anexando os Eventos ---
+  // --- Anexando os Eventos aos Elementos do DOM ---
 
   loginForm.addEventListener("submit", handleLoginSubmit);
   registerForm.addEventListener("submit", handleRegisterSubmit);
@@ -208,9 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
   transactionsTable.addEventListener("click", handleTransactionTableClick);
   closeModalBtn.addEventListener("click", ui.hideSuccessModal);
   successModal.addEventListener("click", (event) => {
-    if (event.target === successModal) {
-      ui.hideSuccessModal();
-    }
+    if (event.target === successModal) ui.hideSuccessModal();
   });
   deleteAccountBtn.addEventListener("click", handleDeleteAccountClick);
   editTransactionForm.addEventListener("submit", handleEditFormSubmit);
@@ -219,7 +268,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "click",
     (e) => e.target === editModal && ui.closeEditModal()
   );
+  finalDeleteBtn.addEventListener("click", handleFinalDelete);
+  cancelDeleteAccountBtn.addEventListener("click", ui.closeDeleteConfirmModal);
+  deleteConfirmInput.addEventListener("input", handleDeleteConfirmInput);
+  deleteConfirmModal.addEventListener(
+    "click",
+    (e) => e.target === deleteConfirmModal && ui.closeDeleteConfirmModal()
+  );
 
-  // Roda a aplicação pela primeira vez
+  // Inicializa a aplicação na primeira carga
   initializeApp();
 });
