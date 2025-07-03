@@ -23,6 +23,8 @@ jobs:
           node-version: "20"
 
       - name: Install and Build 🔧
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           cd frontend
           npm install
