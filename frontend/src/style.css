@@ -308,14 +308,35 @@ section {
   align-items: center;
 }
 
+/* Estilo base para os botões do cabeçalho */
+#logout-btn,
 .danger-btn {
-  background-color: var(
-    --despesa-color
-  ) !important; /* Usando nossa cor de despesa */
-  color: white !important;
-  border: none;
+  background: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Estilo específico do botão de Logout */
+#logout-btn {
+  border: 1px solid var(--primary-green);
+  color: var(--primary-green);
+}
+
+#logout-btn:hover {
+  background-color: var(--primary-green);
+  color: var(--surface-dark);
+}
+
+/* Estilo específico do botão de Deletar (perigo) */
+.danger-btn {
+  border: 1px solid var(--despesa-color);
+  color: var(--despesa-color);
 }
 
 .danger-btn:hover {
-  background-color: #9b2c2c !important; /* Um vermelho mais escuro no hover */
+  background-color: var(--despesa-color);
+  color: var(--text-primary);
 }
