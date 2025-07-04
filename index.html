@@ -5,19 +5,23 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-BwS6Oiaf.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DuBT3tu7.css">
+    <script type="module" crossorigin src="/verdin/assets/index-DMXFbLws.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DaDBEHPV.css">
   </head>
 
   <body>
     <div id="app">
       <div id="landing-view">
         <header class="landing-header">
-          <div class="logo-container">
-            <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
-            <span class="landing-brand-name">Verdin</span>
-          </div>
-          <a href="#/auth" class="btn btn-primary">Acessar Plataforma</a>
+          <a href="#/" class="logo-link">
+            <div class="logo-container">
+              <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
+              <span class="landing-brand-name">Verdin</span>
+            </div>
+          </a>
+          <a href="#/auth" id="header-cta-btn" class="btn btn-primary"
+            >Acessar Plataforma</a
+          >
         </header>
 
         <main class="landing-main">
@@ -179,10 +183,12 @@
 
       <div id="app-view" class="hidden">
         <header class="app-header">
-          <div class="logo-container">
-            <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
-            <h1>Verdin</h1>
-          </div>
+          <a href="#/" class="logo-link">
+            <div class="logo-container">
+              <img src="/verdin/logo.svg" alt="Logo Verdin" class="logo-img" />
+              <h1>Verdin</h1>
+            </div>
+          </a>
           <div class="header-buttons">
             <button id="logout-btn">Sair</button>
             <button id="delete-account-btn" class="danger-btn">
