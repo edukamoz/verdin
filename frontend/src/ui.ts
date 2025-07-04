@@ -19,6 +19,10 @@ const landingView = document.querySelector<HTMLDivElement>("#landing-view")!;
 const fabButton = document.querySelector<HTMLButtonElement>(
   "#open-add-modal-btn"
 )!;
+const filterModal = document.querySelector<HTMLDivElement>("#filter-modal")!;
+
+export const openFilterModal = () => filterModal.classList.remove("hidden");
+export const closeFilterModal = () => filterModal.classList.add("hidden");
 
 // Elementos principais da interface
 const authView = document.querySelector<HTMLDivElement>("#auth-view")!;
@@ -89,6 +93,33 @@ const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   date.setDate(date.getDate() + 1); // Corrige possíveis problemas de fuso horário
   return date.toLocaleDateString("pt-BR");
+};
+
+const categories = [
+  "Moradia",
+  "Transporte",
+  "Alimentação",
+  "Lazer",
+  "Estudos",
+  "Viagens",
+  "Outras",
+];
+
+const categoryFilterContainer = document.querySelector<HTMLDivElement>(
+  "#category-filter-select"
+)!;
+
+export const renderCategoryFilters = () => {
+  categoryFilterContainer.innerHTML = ""; // Limpa antes de renderizar
+  categories.forEach((cat) => {
+    const checkboxWrapper = document.createElement("div");
+    checkboxWrapper.classList.add("category-checkbox");
+    checkboxWrapper.innerHTML = `
+      <input type="checkbox" id="cat-${cat}" name="category" value="${cat}">
+      <label for="cat-${cat}">${cat}</label>
+    `;
+    categoryFilterContainer.appendChild(checkboxWrapper);
+  });
 };
 
 // --- Funções de Renderização e UI ---

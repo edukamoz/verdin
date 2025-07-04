@@ -55,7 +55,11 @@ export const registerUser = (data: object) =>
     body: JSON.stringify(data),
   });
 
-export const getTransactions = () => fetchWithAuth("/api/transactions");
+export const getTransactions = (filters: any = {}) => {
+  // Constrói a query string a partir do objeto de filtros
+  const query = new URLSearchParams(filters).toString();
+  return fetchWithAuth(`/api/transactions?${query}`);
+};
 export const createTransaction = (data: object) =>
   fetchWithAuth("/api/transactions", {
     method: "POST",

@@ -9,6 +9,7 @@
   --despesa-color: #f56565;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --warning-color: #f59e0b;
+  --accent-blue: #3b82f6; /* Azul para ações de filtro/informação */
 }
 * {
   box-sizing: border-box;
@@ -608,4 +609,190 @@ select {
 
 .fab:hover {
   transform: scale(1.1); /* Efeito de crescimento ao passar o mouse */
+}
+
+/* ====================================================== */
+/* === ESTILOS DO FILTRO DE TRANSAÇÕES === */
+/* ====================================================== */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem; /* Ajusta o espaço abaixo do título */
+}
+
+#transactions-section h2 {
+  margin-bottom: 0; /* Remove a margem do h2 para alinhar com o botão */
+}
+
+/* Estilo base para botões de ícone */
+.icon-btn {
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.icon-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Estilo específico do botão de filtro */
+.filter-btn {
+  color: var(--accent-blue);
+}
+
+.filter-btn:hover {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+/* Estilos para os grupos dentro do modal de filtro */
+.filter-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Estilos para o controle de botões (Todos | Receitas | Despesas) */
+.segmented-control {
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden; /* Garante que os cantos arredondados funcionem */
+}
+
+.segmented-control button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.segmented-control button:not(:last-child) {
+  border-right: 1px solid var(--border-color);
+}
+
+.segmented-control button.active {
+  background-color: var(--accent-blue);
+  color: white;
+  font-weight: 600;
+}
+
+/* Estilos para o filtro de data */
+.date-range-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-range-filter span {
+  color: var(--text-secondary);
+}
+
+#filter-category-select {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.category-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* ====================================================== */
+/* === ESTILOS CUSTOMIZADOS PARA CHECKBOXES === */
+/* ====================================================== */
+
+/* O contêiner de cada checkbox que já tínhamos */
+.category-checkbox {
+  display: flex;
+  align-items: center;
+  position: relative; /* Essencial para o posicionamento dos pseudo-elementos */
+  cursor: pointer;
+  padding: 5px 0;
+  user-select: none; /* Impede que o texto seja selecionado ao clicar */
+}
+
+/* 1. Escondendo o checkbox real e feio do navegador */
+.category-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute; /* Remove do fluxo da página */
+}
+
+/* 2. Estilizando a label para ser nosso elemento principal */
+.category-checkbox label {
+  position: relative;
+  padding-left: 35px; /* Cria espaço à esquerda para a nossa "caixinha" customizada */
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+/* 3. Criando a "caixinha" (o checkbox falso) usando um pseudo-elemento */
+.category-checkbox label::before {
+  content: ""; /* Pseudo-elementos precisam de 'content' */
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* Alinha verticalmente com o texto */
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-dark);
+  transition: all 0.2s ease-in-out;
+}
+
+/* 4. Criando o "check" (o sinal de visto) usando outro pseudo-elemento */
+.category-checkbox label::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white; /* A cor do "visto" */
+  border-width: 0 3px 3px 0;
+  opacity: 0; /* Começa invisível */
+  transform: translateY(-70%) rotate(45deg); /* Posiciona e rotaciona para formar o "V" */
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 5. A MÁGICA: Mudando os estilos quando o checkbox real (invisível) está :checked */
+
+/* Quando o input está checado, muda a cor da caixinha (::before) */
+.category-checkbox input[type="checkbox"]:checked + label::before {
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
+}
+
+/* Quando o input está checado, mostra o "visto" (::after) */
+.category-checkbox input[type="checkbox"]:checked + label::after {
+  opacity: 1;
+}
+
+/* Quando o input está checado, destaca o texto da label */
+.category-checkbox input[type="checkbox"]:checked + label {
+  color: var(--text-primary);
+  font-weight: 600;
 }
