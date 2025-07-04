@@ -95,6 +95,7 @@ export const renderTransactions = (transactions: Transaction[]): void => {
   transactionsTableBody.innerHTML = "";
 
   if (transactions.length === 0) {
+    // Atualizamos o colspan para 5, pois agora temos 5 colunas
     transactionsTableBody.innerHTML = `<tr><td colspan="5">Nenhuma transação encontrada.</td></tr>`;
     return;
   }
@@ -102,26 +103,29 @@ export const renderTransactions = (transactions: Transaction[]): void => {
   transactions.forEach((transaction) => {
     const tr = document.createElement("tr");
     const isReceita = transaction.type === "receita";
-    const category = transaction.category || "---"; // Mostra '---' se a categoria for nula
+
+    // Se a transação for uma despesa, usamos a categoria dela. Se for receita ou não tiver categoria, usamos '---'.
+    const category =
+      transaction.type === "despesa" ? transaction.category || "Outras" : "---";
+
     const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>`;
     const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.134-2.033-2.134H8.716c-1.123 0-2.033.954-2.033 2.134v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>`;
-    // ... seu código dos ícones SVG ...
 
     tr.innerHTML = `
+      <td>${category}</td>
       <td>${transaction.description}</td>
       <td class="${isReceita ? "receita" : "despesa"}">${formatCurrency(
       parseFloat(transaction.amount)
     )}</td>
       <td>${formatDate(transaction.date)}</td>
-      <td>${category}</td> <td>
+      <td>
         <button class="edit-btn" title="Editar" 
           data-id="${transaction.id}"
           data-description="${transaction.description}"
           data-amount="${transaction.amount}"
           data-type="${transaction.type}"
           data-date="${transaction.date.split("T")[0]}"
-          data-category="${transaction.category || ""}" 
-          >
+          data-category="${transaction.category || ""}">
           ${editIcon}
         </button>
         <button class="delete-btn" title="Excluir" data-id="${transaction.id}">

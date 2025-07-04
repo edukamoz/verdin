@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../config/db";
+import { Transaction } from "../types";
 
 export const getAllTransactions = async (req: Request, res: Response) => {
   try {
@@ -14,11 +15,19 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 };
 
 export const createTransaction = async (req: Request, res: Response) => {
-  const { description, amount, type, date } = req.body;
+  // --- CORREÇÃO AQUI ---
+  // Nós precisamos extrair 'category' do req.body junto com os outros campos.
+  const { description, amount, type, date, category } = req.body as Transaction;
+
   try {
+    // Se a transação for do tipo 'receita', nós forçamos a categoria a ser nula.
+    // Caso contrário, usamos a categoria que veio do frontend.
+    const finalCategory = type === "receita" ? null : category;
+
     const newTransaction = await pool.query(
-      "INSERT INTO transactions (user_id, description, amount, type, date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [req.user!.id, description, amount, type, date]
+      // A query SQL já estava correta, esperando 6 valores.
+      "INSERT INTO transactions (user_id, description, amount, type, date, category) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [req.user!.id, description, amount, type, date, finalCategory]
     );
     res.status(201).json(newTransaction.rows[0]);
   } catch (error) {
@@ -72,12 +81,10 @@ export const updateTransaction = async (req: Request, res: Response) => {
 
     // Se a consulta não afetou nenhuma linha, significa que a transação não existe ou não pertence ao usuário
     if (result.rowCount === 0) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Transação não encontrada ou você não tem permissão para editá-la.",
-        });
+      return res.status(404).json({
+        message:
+          "Transação não encontrada ou você não tem permissão para editá-la.",
+      });
     }
 
     // Retorna a transação atualizada

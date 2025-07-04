@@ -199,9 +199,22 @@ const setupEventListeners = () => {
 
   transactionForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // --- INÍCIO DO BLOCO DE DEPURAÇÃO FORENSE ---
+    console.clear(); // Limpa o console para facilitar a leitura
+    console.log("--- DEBUG: Submissão do Formulário de Nova Transação ---");
+
     const formData = new FormData(transactionForm);
     const typeSwitch =
       transactionForm.querySelector<HTMLInputElement>("#type-switch")!;
+
+    // Verificando os valores brutos que o FormData está pegando de cada campo
+    console.log("Valor do campo 'description':", formData.get("description"));
+    console.log("Valor do campo 'amount':", formData.get("amount"));
+    console.log("Valor do campo 'date':", formData.get("date"));
+    console.log("Valor do campo 'category':", formData.get("category")); // <<< ESTE É O PONTO MAIS IMPORTANTE
+    console.log("O switch está 'checado' (é despesa)?", typeSwitch.checked);
+
     const data = {
       description: formData.get("description"),
       amount: formData.get("amount"),
@@ -209,17 +222,24 @@ const setupEventListeners = () => {
       type: typeSwitch.checked ? "despesa" : "receita",
       category: typeSwitch.checked ? formData.get("category") : null,
     };
-    try {
-      await api.createTransaction(data);
-      transactionForm.reset();
-      // Reseta a visibilidade do campo de categoria
-      transactionForm
-        .querySelector("#category-container")
-        ?.classList.add("hidden");
-      router();
-    } catch (error) {
-      alert(`Erro ao criar transação: ${(error as Error).message}`);
-    }
+
+    console.log("Objeto 'data' final que seria enviado para a API:", data);
+    console.log("------------------------------------------------------");
+    // --- FIM DO BLOCO DE DEPURAÇÃO ---
+
+    // A chamada para a API foi comentada para que possamos analisar os logs sem enviar dados.
+    alert("Verifique o console (F12) para ver os dados de depuração.");
+
+    /* // DESCOMENTE AS LINHAS ABAIXO APÓS A ANÁLISE
+  try {
+    await api.createTransaction(data);
+    transactionForm.reset();
+    transactionForm.querySelector('#category-container')?.classList.add('hidden');
+    router(); 
+  } catch(error) { 
+    alert(`Erro ao criar transação: ${(error as Error).message}`); 
+  }
+  */
   });
 
   transactionsTable.addEventListener("click", (event: MouseEvent) => {
