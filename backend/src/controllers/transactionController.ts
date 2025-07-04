@@ -3,46 +3,61 @@ import pool from "../config/db";
 import { Transaction } from "../types";
 
 export const getAllTransactions = async (req: Request, res: Response) => {
-  // Extrai os possíveis filtros da query string da URL
-  const { type, category, startDate, endDate } = req.query;
+  // 1. Extrai os NOVOS filtros da query string da URL
+  const {
+    type,
+    category,
+    startDate,
+    endDate,
+    description,
+    minValue,
+    maxValue,
+  } = req.query;
   const userId = req.user!.id;
 
-  // Inicia a construção da nossa query SQL
   let queryText = "SELECT * FROM transactions WHERE user_id = $1";
   const queryParams: any[] = [userId];
-
-  let paramIndex = 2; // Começamos no $2, pois $1 já é o user_id
+  let paramIndex = 2;
 
   if (type && type !== "todos") {
-    queryText += ` AND type = $${paramIndex}`;
+    queryText += ` AND type = $${paramIndex++}`;
     queryParams.push(type);
-    paramIndex++;
   }
-
-  // Se a categoria for enviada (ex: "Lazer,Estudos"), transforma em um array
   if (category && typeof category === "string") {
-    queryText += ` AND category = ANY($${paramIndex}::text[])`;
+    queryText += ` AND category = ANY($${paramIndex++}::text[])`;
     queryParams.push(category.split(","));
-    paramIndex++;
   }
-
   if (startDate) {
-    queryText += ` AND date >= $${paramIndex}`;
+    queryText += ` AND date >= $${paramIndex++}`;
     queryParams.push(startDate);
-    paramIndex++;
   }
-
   if (endDate) {
-    queryText += ` AND date <= $${paramIndex}`;
+    queryText += ` AND date <= $${paramIndex++}`;
     queryParams.push(endDate);
-    paramIndex++;
   }
 
-  // Adiciona a ordenação no final
+  // Filtro por descrição (busca parcial, case-insensitive)
+  if (description && typeof description === "string") {
+    queryText += ` AND description ILIKE $${paramIndex++}`;
+    queryParams.push(`%${description}%`); // O '%' é um coringa para buscar parte do texto
+  }
+
+  // Filtro por valor mínimo
+  if (minValue && !isNaN(parseFloat(minValue as string))) {
+    queryText += ` AND amount >= $${paramIndex++}`;
+    queryParams.push(minValue);
+  }
+
+  // Filtro por valor máximo
+  if (maxValue && !isNaN(parseFloat(maxValue as string))) {
+    queryText += ` AND amount <= $${paramIndex++}`;
+    queryParams.push(maxValue);
+  }
+
   queryText += " ORDER BY date DESC";
 
   try {
-    console.log("Executando Query:", queryText, queryParams); // Log para depuração
+    console.log("Executando Query:", queryText, queryParams);
     const allTransactions = await pool.query(queryText, queryParams);
     res.json(allTransactions.rows);
   } catch (err) {
@@ -52,7 +67,6 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 };
 
 export const createTransaction = async (req: Request, res: Response) => {
-  // --- CORREÇÃO AQUI ---
   // Nós precisamos extrair 'category' do req.body junto com os outros campos.
   const { description, amount, type, date, category } = req.body as Transaction;
 

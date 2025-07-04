@@ -33,28 +33,39 @@ router.use(protect);
  *         schema:
  *           type: string
  *           enum: [receita, despesa]
- *         required: false
- *         description: Filtra por tipo de transação.
+ *         description: Filtra por tipo.
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
- *         required: false
- *         description: Filtra por uma ou mais categorias (separadas por vírgula, ex: Lazer,Moradia).
+ *         description: Filtra por categorias (separadas por vírgula).
  *       - in: query
  *         name: startDate
  *         schema:
  *           type: string
  *           format: date
- *         required: false
- *         description: Data de início do período do filtro (YYYY-MM-DD).
+ *         description: Data de início (YYYY-MM-DD).
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
- *         required: false
- *         description: Data de fim do período do filtro (YYYY-MM-DD).
+ *         description: Data de fim (YYYY-MM-DD).
+ *       - in: query
+ *         name: description
+ *         schema:
+ *           type: string
+ *         description: Busca por parte do texto na descrição.
+ *       - in: query
+ *         name: minValue
+ *         schema:
+ *           type: number
+ *         description: Filtra por valor mínimo.
+ *       - in: query
+ *         name: maxValue
+ *         schema:
+ *           type: number
+ *         description: Filtra por valor máximo.
  *     responses:
  *       200:
  *         description: Lista de transações (filtrada ou não).
