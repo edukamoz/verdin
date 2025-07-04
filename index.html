@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-DKjyGpba.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DXrc7inI.css">
+    <script type="module" crossorigin src="/verdin/assets/index-BXFDBNEd.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-asqh0Gbd.css">
   </head>
 
   <body>
@@ -226,26 +226,13 @@
               />
               <input type="date" id="date" name="date" required />
 
-              <div class="radio-group">
-                <div>
-                  <input
-                    type="radio"
-                    id="receita"
-                    name="type"
-                    value="receita"
-                    checked
-                  />
-                  <label for="receita">Receita</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    id="despesa"
-                    name="type"
-                    value="despesa"
-                  />
-                  <label for="despesa">Despesa</label>
-                </div>
+              <div class="switch-container">
+                <span class="switch-label receita-label active">Receita</span>
+                <label class="switch">
+                  <input type="checkbox" id="type-switch" name="type-switch" />
+                  <span class="slider"></span>
+                </label>
+                <span class="switch-label despesa-label">Despesa</span>
               </div>
               <button type="submit" class="btn">Adicionar</button>
             </form>
@@ -326,25 +313,19 @@
 
           <div class="form-control">
             <label>Tipo</label>
-            <div class="radio-group">
-              <div>
+            <div class="switch-container">
+              <span class="switch-label edit-receita-label active"
+                >Receita</span
+              >
+              <label class="switch">
                 <input
-                  type="radio"
-                  id="edit-receita"
-                  name="type"
-                  value="receita"
+                  type="checkbox"
+                  id="edit-type-switch"
+                  name="edit-type-switch"
                 />
-                <label for="edit-receita">Receita</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="edit-despesa"
-                  name="type"
-                  value="despesa"
-                />
-                <label for="edit-despesa">Despesa</label>
-              </div>
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label edit-despesa-label">Despesa</span>
             </div>
           </div>
 
