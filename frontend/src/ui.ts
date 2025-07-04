@@ -38,8 +38,6 @@ const saldoTotalEl =
 
 // Elementos de erro dos formulários de autenticação
 const loginErrorEl = document.querySelector<HTMLDivElement>("#login-error")!;
-const registerErrorEl =
-  document.querySelector<HTMLDivElement>("#register-error")!;
 
 // Modal de sucesso
 const successModal = document.querySelector<HTMLDivElement>("#success-modal")!;
@@ -185,20 +183,28 @@ export const showView = (viewName: "landing" | "auth" | "app"): void => {
  * @param form Formulário alvo ("login" ou "register").
  * @param message Mensagem de erro.
  */
-export const displayAuthError = (
-  form: "login" | "register",
-  message: string
-): void => {
-  const element = form === "login" ? loginErrorEl : registerErrorEl;
-  element.textContent = message;
+export const displayLoginError = (message: string): void => {
+  if (loginErrorEl) {
+    loginErrorEl.textContent = message;
+  }
 };
 
 /**
  * Limpa as mensagens de erro dos formulários de autenticação.
  */
-export const clearAuthErrors = (): void => {
-  loginErrorEl.textContent = "";
-  registerErrorEl.textContent = "";
+export const clearAllAuthErrors = (): void => {
+  // Limpa a mensagem de erro principal do formulário de login
+  if (loginErrorEl) {
+    loginErrorEl.textContent = "";
+  }
+
+  // Encontra e limpa TODAS as mensagens de erro inline
+  // que estão dentro do formulário de registro.
+  document
+    .querySelectorAll("#register-form .error-message-inline")
+    .forEach((el) => {
+      el.textContent = "";
+    });
 };
 
 /**
