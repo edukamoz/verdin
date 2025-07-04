@@ -204,7 +204,7 @@ section {
   border-radius: 8px;
   text-align: center;
   border: 1px solid var(--border-color);
-  max-width: 400px;
+  max-width: 550px;
   width: 90%;
   transform: scale(1);
   transition: transform 0.3s;
@@ -303,25 +303,24 @@ section {
   display: flex;
   gap: 0.5rem;
 }
-#edit-transaction-form .form-control,
-#transaction-form .form-control {
-  margin-bottom: 1rem;
+.form-control {
+  margin-bottom: 1.5rem;
   text-align: left;
 }
-#edit-transaction-form label,
-#transaction-form label {
+
+form label {
   display: block;
   margin-bottom: 0.5rem;
-  text-align: left;
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
-#edit-transaction-form input[type="text"],
-#edit-transaction-form input[type="number"],
-#edit-transaction-form input[type="date"],
-#transaction-form input[type="text"],
-#transaction-form input[type="number"],
-#transaction-form input[type="date"] {
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--border-color);
@@ -329,6 +328,7 @@ section {
   color: var(--text-primary);
   border-radius: 4px;
   font-size: 1rem;
+  font-family: "Poppins", sans-serif;
 }
 .modal-actions {
   display: flex;
@@ -373,7 +373,7 @@ button:disabled {
   border: none !important;
 }
 /* ====================================================== */
-/* === 5. ESTILOS DA LANDING PAGE === */
+/* === ESTILOS DA LANDING PAGE === */
 /* ====================================================== */
 .landing-header {
   display: flex;
@@ -700,23 +700,23 @@ select {
 .date-range-filter {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.date-range-filter input[type="date"] {
+  flex: 1; /* Faz com que os dois inputs dividam o espaço igualmente */
 }
 
 .date-range-filter span {
   color: var(--text-secondary);
 }
 
-#filter-category-select {
+#category-filter-select {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
 }
-.category-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+
 /* ====================================================== */
 /* === ESTILOS CUSTOMIZADOS PARA CHECKBOXES === */
 /* ====================================================== */
@@ -728,6 +728,7 @@ select {
   position: relative; /* Essencial para o posicionamento dos pseudo-elementos */
   cursor: pointer;
   padding: 5px 0;
+  gap: 0.5rem;
   user-select: none; /* Impede que o texto seja selecionado ao clicar */
 }
 

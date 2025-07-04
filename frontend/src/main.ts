@@ -107,19 +107,10 @@ const setupEventListeners = () => {
 
   if (typeSwitch) {
     typeSwitch.addEventListener("change", () => {
-      // --- INÍCIO DO BLOCO DE DEPURAÇÃO ---
-      console.log("--- DEBUG: Switch de NOVA TRANSAÇÃO foi alterado! ---");
-      console.log("Está marcado (é despesa)?", typeSwitch.checked);
-
       // Vamos verificar se estamos encontrando o container da categoria
       const categoryContainer = transactionForm?.querySelector(
         "#category-container"
       );
-      console.log(
-        "Elemento do container de categoria encontrado:",
-        categoryContainer
-      );
-      // --- FIM DO BLOCO DE DEPURAÇÃO ---
 
       // O resto do código que controla a aparência
       transactionForm
@@ -374,8 +365,6 @@ const setupEventListeners = () => {
       type: editTypeSwitch.checked ? "despesa" : "receita",
       category: editTypeSwitch.checked ? formData.get("category") : null,
     };
-
-    console.log("FRONTEND-Enviando para UPDATE:", data);
 
     try {
       await api.updateTransaction(transactionId, data);
