@@ -1,5 +1,3 @@
-// Conteúdo COMPLETO E FINAL de frontend/src/main.ts
-
 import "./style.css";
 import * as auth from "./auth";
 import * as api from "./api";
@@ -53,7 +51,7 @@ const setupEventListeners = () => {
   const registerForm =
     document.querySelector<HTMLFormElement>("#register-form");
   const transactionForm =
-    document.querySelector<HTMLFormElement>("#transaction-form");
+    document.querySelector<HTMLFormElement>("#transaction-form")!;
   const logoutBtn = document.querySelector<HTMLButtonElement>("#logout-btn");
   const transactionsTable = document.querySelector<HTMLTableElement>(
     "#transactions-table"
@@ -67,7 +65,7 @@ const setupEventListeners = () => {
   const editModal = document.querySelector<HTMLDivElement>("#edit-modal");
   const editTransactionForm = document.querySelector<HTMLFormElement>(
     "#edit-transaction-form"
-  );
+  )!;
   const cancelEditBtn =
     document.querySelector<HTMLButtonElement>("#cancel-edit-btn");
   const finalDeleteBtn =
@@ -82,31 +80,52 @@ const setupEventListeners = () => {
     "#delete-confirm-modal"
   );
   const typeSwitch =
-    transactionForm?.querySelector<HTMLInputElement>("#type-switch");
+    transactionForm.querySelector<HTMLInputElement>("#type-switch");
   const editTypeSwitch =
-    editTransactionForm?.querySelector<HTMLInputElement>("#edit-type-switch"); // Boa prática adicionar aqui também
+    editTransactionForm.querySelector<HTMLInputElement>("#edit-type-switch");
 
   if (typeSwitch) {
     typeSwitch.addEventListener("change", () => {
-      // Usamos transactionForm? para garantir que ele não é nulo aqui também
+      // --- INÍCIO DO BLOCO DE DEPURAÇÃO ---
+      console.log("--- DEBUG: Switch de NOVA TRANSAÇÃO foi alterado! ---");
+      console.log("Está marcado (é despesa)?", typeSwitch.checked);
+
+      // Vamos verificar se estamos encontrando o container da categoria
+      const categoryContainer = transactionForm?.querySelector(
+        "#category-container"
+      );
+      console.log(
+        "Elemento do container de categoria encontrado:",
+        categoryContainer
+      );
+      // --- FIM DO BLOCO DE DEPURAÇÃO ---
+
+      // O resto do código que controla a aparência
       transactionForm
-        ?.querySelector(".receita-label")!
-        .classList.toggle("active", !typeSwitch.checked);
+        ?.querySelector(".receita-label")
+        ?.classList.toggle("active", !typeSwitch.checked);
       transactionForm
-        ?.querySelector(".despesa-label")!
-        .classList.toggle("active", typeSwitch.checked);
+        ?.querySelector(".despesa-label")
+        ?.classList.toggle("active", typeSwitch.checked);
+      categoryContainer?.classList.toggle("hidden", !typeSwitch.checked);
     });
   }
-
   if (editTypeSwitch) {
     editTypeSwitch.addEventListener("change", () => {
-      // Usamos editTransactionForm? para garantir que ele não é nulo aqui também
+      // Procura os elementos APENAS DENTRO do formulário de edição
+      const editCategoryContainer = editTransactionForm.querySelector(
+        "#edit-category-container"
+      );
       editTransactionForm
-        ?.querySelector(".edit-receita-label")!
-        .classList.toggle("active", !editTypeSwitch.checked);
+        .querySelector(".edit-receita-label")
+        ?.classList.toggle("active", !editTypeSwitch.checked);
       editTransactionForm
-        ?.querySelector(".edit-despesa-label")!
-        .classList.toggle("active", editTypeSwitch.checked);
+        .querySelector(".edit-despesa-label")
+        ?.classList.toggle("active", editTypeSwitch.checked);
+      editCategoryContainer?.classList.toggle(
+        "hidden",
+        !editTypeSwitch.checked
+      );
     });
   }
 
@@ -188,10 +207,15 @@ const setupEventListeners = () => {
       amount: formData.get("amount"),
       date: formData.get("date"),
       type: typeSwitch.checked ? "despesa" : "receita",
+      category: typeSwitch.checked ? formData.get("category") : null,
     };
     try {
       await api.createTransaction(data);
       transactionForm.reset();
+      // Reseta a visibilidade do campo de categoria
+      transactionForm
+        .querySelector("#category-container")
+        ?.classList.add("hidden");
       router();
     } catch (error) {
       alert(`Erro ao criar transação: ${(error as Error).message}`);
@@ -231,14 +255,14 @@ const setupEventListeners = () => {
     e.preventDefault();
     const formData = new FormData(editTransactionForm);
     const transactionId = parseInt(formData.get("transactionId") as string, 10);
-    const editFormData = new FormData(editTransactionForm);
     const editTypeSwitch =
       editTransactionForm.querySelector<HTMLInputElement>("#edit-type-switch")!;
     const data = {
-      description: editFormData.get("description"),
-      amount: editFormData.get("amount"),
-      date: editFormData.get("date"),
+      description: formData.get("description"),
+      amount: formData.get("amount"),
+      date: formData.get("date"),
       type: editTypeSwitch.checked ? "despesa" : "receita",
+      category: editTypeSwitch.checked ? formData.get("category") : null,
     };
     try {
       await api.updateTransaction(transactionId, data);

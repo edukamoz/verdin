@@ -599,3 +599,14 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(26px);
 }
+
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+}
