@@ -81,6 +81,34 @@ const setupEventListeners = () => {
   const deleteConfirmModal = document.querySelector<HTMLDivElement>(
     "#delete-confirm-modal"
   );
+  const typeSwitch =
+    transactionForm?.querySelector<HTMLInputElement>("#type-switch");
+  const editTypeSwitch =
+    editTransactionForm?.querySelector<HTMLInputElement>("#edit-type-switch"); // Boa prática adicionar aqui também
+
+  if (typeSwitch) {
+    typeSwitch.addEventListener("change", () => {
+      // Usamos transactionForm? para garantir que ele não é nulo aqui também
+      transactionForm
+        ?.querySelector(".receita-label")!
+        .classList.toggle("active", !typeSwitch.checked);
+      transactionForm
+        ?.querySelector(".despesa-label")!
+        .classList.toggle("active", typeSwitch.checked);
+    });
+  }
+
+  if (editTypeSwitch) {
+    editTypeSwitch.addEventListener("change", () => {
+      // Usamos editTransactionForm? para garantir que ele não é nulo aqui também
+      editTransactionForm
+        ?.querySelector(".edit-receita-label")!
+        .classList.toggle("active", !editTypeSwitch.checked);
+      editTransactionForm
+        ?.querySelector(".edit-despesa-label")!
+        .classList.toggle("active", editTypeSwitch.checked);
+    });
+  }
 
   if (
     !loginForm ||
@@ -152,7 +180,15 @@ const setupEventListeners = () => {
 
   transactionForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(transactionForm).entries());
+    const formData = new FormData(transactionForm);
+    const typeSwitch =
+      transactionForm.querySelector<HTMLInputElement>("#type-switch")!;
+    const data = {
+      description: formData.get("description"),
+      amount: formData.get("amount"),
+      date: formData.get("date"),
+      type: typeSwitch.checked ? "despesa" : "receita",
+    };
     try {
       await api.createTransaction(data);
       transactionForm.reset();
@@ -195,11 +231,14 @@ const setupEventListeners = () => {
     e.preventDefault();
     const formData = new FormData(editTransactionForm);
     const transactionId = parseInt(formData.get("transactionId") as string, 10);
+    const editFormData = new FormData(editTransactionForm);
+    const editTypeSwitch =
+      editTransactionForm.querySelector<HTMLInputElement>("#edit-type-switch")!;
     const data = {
-      description: formData.get("description"),
-      amount: formData.get("amount"),
-      date: formData.get("date"),
-      type: formData.get("type"),
+      description: editFormData.get("description"),
+      amount: editFormData.get("amount"),
+      date: editFormData.get("date"),
+      type: editTypeSwitch.checked ? "despesa" : "receita",
     };
     try {
       await api.updateTransaction(transactionId, data);

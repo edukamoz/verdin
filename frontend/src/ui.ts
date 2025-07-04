@@ -224,11 +224,18 @@ export const openEditModal = (transaction: Transaction) => {
   editDescriptionInput.value = transaction.description;
   editAmountInput.value = parseFloat(transaction.amount).toFixed(2);
   editDateInput.value = transaction.date.split("T")[0]; // Formato YYYY-MM-DD
+  const editTypeSwitch =
+    document.querySelector<HTMLInputElement>("#edit-type-switch")!;
+  // Se for despesa, o switch fica "ligado" (checked)
+  editTypeSwitch.checked = transaction.type === "despesa";
 
   // Marca o radio button correto (receita ou despesa)
-  document.querySelector<HTMLInputElement>(
-    `input[name="type"][value="${transaction.type}"]`
-  )!.checked = true;
+  document
+    .querySelector(".edit-receita-label")!
+    .classList.toggle("active", transaction.type === "receita");
+  document
+    .querySelector(".edit-despesa-label")!
+    .classList.toggle("active", transaction.type === "despesa");
 
   editModal.classList.remove("hidden");
 };
