@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-mP8he4Hh.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-D6Ak2cqK.css">
+    <script type="module" crossorigin src="/verdin/assets/index-Bze5kWwU.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DL5cY0zF.css">
   </head>
 
   <body>
@@ -270,7 +270,28 @@
           </section>
 
           <section id="transactions-section">
-            <h2>Histórico</h2>
+            <div class="section-header">
+              <h2>Histórico</h2>
+              <button
+                id="open-filter-modal-btn"
+                class="icon-btn filter-btn"
+                title="Filtrar Transações"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.572a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
+                  />
+                </svg>
+              </button>
+            </div>
 
             <table id="transactions-table">
               <thead>
@@ -494,6 +515,45 @@
               Cancelar
             </button>
             <button type="submit" class="btn">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="filter-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h2>Filtrar Transações</h2>
+        <form id="filter-form">
+          <div class="filter-group">
+            <label>Tipo</label>
+            <div class="segmented-control">
+              <button type="button" data-value="todos" class="active">
+                Todos
+              </button>
+              <button type="button" data-value="receita">Receitas</button>
+              <button type="button" data-value="despesa">Despesas</button>
+            </div>
+          </div>
+
+          <div id="filter-category-container" class="filter-group hidden">
+            <label>Categorias</label>
+            <div id="category-filter-select"></div>
+          </div>
+
+          <div class="filter-group">
+            <label>Período</label>
+            <div class="date-range-filter">
+              <input type="date" name="startDate" />
+              <span>até</span>
+              <input type="date" name="endDate" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="clear-filters-btn" class="btn-secondary">
+              Limpar
+            </button>
+            <button type="submit" class="btn">Aplicar Filtros</button>
           </div>
         </form>
       </div>
