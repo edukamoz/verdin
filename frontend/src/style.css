@@ -130,31 +130,12 @@ section {
   font-size: 1.5rem;
   font-weight: 600;
 }
-#transaction-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-#transaction-form #description {
-  grid-column: 1/-1;
-}
-#transaction-form input,
-#transaction-form .radio-group {
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--background-dark);
-  color: var(--text-primary);
-  border-radius: 4px;
-}
 .radio-group {
   display: flex;
   gap: 1rem;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--border-color);
-}
-#transaction-form .btn {
-  grid-column: 1/-1;
 }
 #transactions-table {
   width: 100%;
@@ -321,11 +302,13 @@ section {
   display: flex;
   gap: 0.5rem;
 }
-#edit-transaction-form .form-control {
+#edit-transaction-form .form-control,
+#transaction-form .form-control {
   margin-bottom: 1rem;
   text-align: left;
 }
-#edit-transaction-form label {
+#edit-transaction-form label,
+#transaction-form label {
   display: block;
   margin-bottom: 0.5rem;
   text-align: left;
@@ -334,7 +317,10 @@ section {
 }
 #edit-transaction-form input[type="text"],
 #edit-transaction-form input[type="number"],
-#edit-transaction-form input[type="date"] {
+#edit-transaction-form input[type="date"],
+#transaction-form input[type="text"],
+#transaction-form input[type="number"],
+#transaction-form input[type="date"] {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--border-color);
@@ -599,4 +585,27 @@ select {
   font-size: 0.8rem;
   min-height: 1.2em;
   padding-top: 4px;
+}
+
+.fab {
+  position: fixed; /* Fica fixo na tela */
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Deixa o botão redondo */
+  background-color: var(--primary-green);
+  color: white;
+  font-size: 2.5rem; /* Tamanho do sinal de '+' */
+  line-height: 60px; /* Alinha o '+' verticalmente */
+  text-align: center;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 999; /* Garante que fique acima de outros elementos */
+  transition: transform 0.2s ease-in-out;
+}
+
+.fab:hover {
+  transform: scale(1.1); /* Efeito de crescimento ao passar o mouse */
 }

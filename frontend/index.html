@@ -267,53 +267,9 @@
             </div>
           </section>
 
-          <section id="transaction-form-section">
-            <h2>Nova Transação</h2>
-            <form id="transaction-form" method="POST">
-              <input
-                type="text"
-                id="description"
-                name="description"
-                placeholder="Descrição"
-                required
-              />
-              <input
-                type="number"
-                id="amount"
-                name="amount"
-                placeholder="Valor"
-                step="0.01"
-                required
-              />
-              <input type="date" id="date" name="date" required />
-
-              <div id="category-container" class="form-control hidden">
-                <label for="category">Categoria da Despesa</label>
-                <select id="category" name="category">
-                  <option value="Moradia">Moradia</option>
-                  <option value="Transporte">Transporte</option>
-                  <option value="Alimentação">Alimentação</option>
-                  <option value="Lazer">Lazer</option>
-                  <option value="Estudos">Estudos</option>
-                  <option value="Viagens">Viagens</option>
-                  <option value="Outras">Outras</option>
-                </select>
-              </div>
-
-              <div class="switch-container">
-                <span class="switch-label receita-label active">Receita</span>
-                <label class="switch">
-                  <input type="checkbox" id="type-switch" name="type-switch" />
-                  <span class="slider"></span>
-                </label>
-                <span class="switch-label despesa-label">Despesa</span>
-              </div>
-              <button type="submit" class="btn">Adicionar</button>
-            </form>
-          </section>
-
           <section id="transactions-section">
             <h2>Histórico</h2>
+
             <table id="transactions-table">
               <thead>
                 <tr>
@@ -330,6 +286,15 @@
         </main>
       </div>
     </div>
+
+    <button
+      id="open-add-modal-btn"
+      class="fab hidden"
+      title="Adicionar Nova Transação"
+    >
+      +
+    </button>
+
     <div id="success-modal" class="modal-overlay hidden">
       <div class="modal-content">
         <svg
@@ -361,6 +326,37 @@
           <input type="hidden" id="edit-transaction-id" name="transactionId" />
 
           <div class="form-control">
+            <label>Tipo</label>
+            <div class="switch-container">
+              <span class="switch-label edit-receita-label active"
+                >Receita</span
+              >
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  id="edit-type-switch"
+                  name="edit-type-switch"
+                />
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label edit-despesa-label">Despesa</span>
+            </div>
+          </div>
+
+          <div id="edit-category-container" class="form-control hidden">
+            <label for="edit-category">Categoria da Despesa</label>
+            <select id="edit-category" name="category">
+              <option value="Moradia">Moradia</option>
+              <option value="Transporte">Transporte</option>
+              <option value="Alimentação">Alimentação</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Estudos">Estudos</option>
+              <option value="Viagens">Viagens</option>
+              <option value="Outras">Outras</option>
+            </select>
+          </div>
+
+          <div class="form-control full-width">
             <label for="edit-description">Descrição</label>
             <input
               type="text"
@@ -384,37 +380,6 @@
           <div class="form-control">
             <label for="edit-date">Data</label>
             <input type="date" id="edit-date" name="date" required />
-          </div>
-
-          <div id="edit-category-container" class="form-control hidden">
-            <label for="edit-category">Categoria da Despesa</label>
-            <select id="edit-category" name="category">
-              <option value="Moradia">Moradia</option>
-              <option value="Transporte">Transporte</option>
-              <option value="Alimentação">Alimentação</option>
-              <option value="Lazer">Lazer</option>
-              <option value="Estudos">Estudos</option>
-              <option value="Viagens">Viagens</option>
-              <option value="Outras">Outras</option>
-            </select>
-          </div>
-
-          <div class="form-control">
-            <label>Tipo</label>
-            <div class="switch-container">
-              <span class="switch-label edit-receita-label active"
-                >Receita</span
-              >
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  id="edit-type-switch"
-                  name="edit-type-switch"
-                />
-                <span class="slider"></span>
-              </label>
-              <span class="switch-label edit-despesa-label">Despesa</span>
-            </div>
           </div>
 
           <div class="modal-actions">
@@ -470,6 +435,65 @@
             Confirmar e Deletar
           </button>
         </div>
+      </div>
+    </div>
+    <div id="add-transaction-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h2>Nova Transação</h2>
+        <form id="transaction-form" method="POST" novalidate>
+          <div class="form-control">
+            <label>Tipo</label>
+            <div class="switch-container">
+              <span class="switch-label receita-label active">Receita</span>
+              <label class="switch">
+                <input type="checkbox" id="type-switch" name="type-switch" />
+                <span class="slider"></span>
+              </label>
+              <span class="switch-label despesa-label">Despesa</span>
+            </div>
+          </div>
+
+          <div id="category-container" class="form-control hidden">
+            <label for="category">Categoria da Despesa</label>
+            <select id="category" name="category">
+              <option value="Moradia">Moradia</option>
+              <option value="Transporte">Transporte</option>
+              <option value="Alimentação">Alimentação</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Estudos">Estudos</option>
+              <option value="Viagens">Viagens</option>
+              <option value="Outras">Outras</option>
+            </select>
+          </div>
+
+          <div class="form-control full-width">
+            <label for="description">Descrição</label>
+            <input type="text" id="description" name="description" required />
+          </div>
+
+          <div class="form-control">
+            <label for="amount">Valor</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              step="0.01"
+              required
+            />
+          </div>
+
+          <div class="form-control">
+            <label for="date">Data</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="cancel-add-btn" class="btn-secondary">
+              Cancelar
+            </button>
+            <button type="submit" class="btn">Adicionar</button>
+          </div>
+        </form>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

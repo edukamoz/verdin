@@ -89,6 +89,14 @@ const setupEventListeners = () => {
     transactionForm.querySelector<HTMLInputElement>("#type-switch");
   const editTypeSwitch =
     editTransactionForm.querySelector<HTMLInputElement>("#edit-type-switch");
+  const openAddModalBtn = document.querySelector<HTMLButtonElement>(
+    "#open-add-modal-btn"
+  )!;
+  const cancelAddBtn =
+    document.querySelector<HTMLButtonElement>("#cancel-add-btn")!;
+  const addTransactionModal = document.querySelector<HTMLDivElement>(
+    "#add-transaction-modal"
+  )!;
 
   if (typeSwitch) {
     typeSwitch.addEventListener("change", () => {
@@ -157,6 +165,15 @@ const setupEventListeners = () => {
     );
     return;
   }
+
+  // --- Listeners para o NOVO fluxo de adicionar transação ---
+  openAddModalBtn.addEventListener("click", ui.openAddTransactionModal);
+  cancelAddBtn.addEventListener("click", ui.closeAddTransactionModal);
+  addTransactionModal.addEventListener("click", (e) => {
+    if (e.target === addTransactionModal) {
+      ui.closeAddTransactionModal();
+    }
+  });
 
   // --- LÓGICA PARA MOSTRAR/ESCONDER SENHA ---
   const setupPasswordTogglers = () => {
@@ -298,13 +315,10 @@ const setupEventListeners = () => {
       type: typeSwitch.checked ? "despesa" : "receita",
       category: typeSwitch.checked ? formData.get("category") : null,
     };
-
     try {
       await api.createTransaction(data);
       transactionForm.reset();
-      transactionForm
-        .querySelector("#category-container")
-        ?.classList.add("hidden");
+      ui.closeAddTransactionModal(); // Fecha o modal após sucesso
       router();
     } catch (error) {
       alert(`Erro ao criar transação: ${(error as Error).message}`);

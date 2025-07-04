@@ -16,6 +16,9 @@ interface Transaction {
 
 // Adicionamos o seletor da landing page
 const landingView = document.querySelector<HTMLDivElement>("#landing-view")!;
+const fabButton = document.querySelector<HTMLButtonElement>(
+  "#open-add-modal-btn"
+)!;
 
 // Elementos principais da interface
 const authView = document.querySelector<HTMLDivElement>("#auth-view")!;
@@ -62,6 +65,9 @@ const deleteConfirmInput = document.querySelector<HTMLInputElement>(
 )!;
 const finalDeleteBtn =
   document.querySelector<HTMLButtonElement>("#final-delete-btn")!;
+const addTransactionModal = document.querySelector<HTMLDivElement>(
+  "#add-transaction-modal"
+)!;
 
 // --- Funções Auxiliares de Formatação ---
 
@@ -163,18 +169,23 @@ export const updateSummary = (transactions: Transaction[]): void => {
  * @param viewName Nome da view a ser exibida ("auth" ou "app").
  */
 export const showView = (viewName: "landing" | "auth" | "app"): void => {
-  // 1. Esconde todas as telas
+  // 1. Esconde todas as telas principais
   landingView.classList.add("hidden");
   authView.classList.add("hidden");
   appView.classList.add("hidden");
 
-  // 2. Mostra apenas a tela correta
+  // 2. Esconde o botão flutuante por padrão
+  fabButton.classList.add("hidden");
+
+  // 3. Mostra apenas a tela correta E o botão, se necessário
   if (viewName === "landing") {
     landingView.classList.remove("hidden");
   } else if (viewName === "auth") {
     authView.classList.remove("hidden");
   } else if (viewName === "app") {
     appView.classList.remove("hidden");
+    // Mostra o botão flutuante APENAS na tela do dashboard
+    fabButton.classList.remove("hidden");
   }
 };
 
@@ -291,4 +302,12 @@ export const updateHeaderButton = (isLoggedIn: boolean) => {
     headerCtaBtn.textContent = "Acessar Plataforma";
     headerCtaBtn.href = "#/auth";
   }
+};
+
+export const openAddTransactionModal = () => {
+  addTransactionModal.classList.remove("hidden");
+};
+
+export const closeAddTransactionModal = () => {
+  addTransactionModal.classList.add("hidden");
 };
