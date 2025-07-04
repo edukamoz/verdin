@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-DMXFbLws.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-DaDBEHPV.css">
+    <script type="module" crossorigin src="/verdin/assets/index-l29iv8fg.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-X12J54hC.css">
   </head>
 
   <body>
@@ -133,49 +133,106 @@
           <p>Seu assistente financeiro pessoal.</p>
         </header>
         <div class="form-container">
-          <form id="login-form" method="POST">
+          <form id="login-form" method="POST" novalidate>
             <h2>Login</h2>
-            <div id="login-error" class="error-message"></div>
-            <input
-              type="email"
-              id="login-email"
-              name="email"
-              placeholder="E-mail"
-              required
-            />
-            <input
-              type="password"
-              id="login-password"
-              name="password"
-              placeholder="Senha"
-              required
-            />
-            <button type="submit">Entrar</button>
+            <div class="error-message-inline" id="login-error"></div>
+
+            <div class="form-control">
+              <label for="login-email">E-mail</label>
+              <input
+                type="email"
+                id="login-email"
+                name="email"
+                placeholder="seu@email.com"
+                required
+              />
+            </div>
+
+            <div class="form-control">
+              <label for="login-password">Senha</label>
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  placeholder="Sua senha"
+                  required
+                />
+                <span class="password-toggle-icon" data-target="login-password">
+                </span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn">Entrar</button>
           </form>
-          <form id="register-form" method="POST">
+          <form id="register-form" method="POST" novalidate>
             <h2>Crie sua Conta</h2>
-            <div id="register-error" class="error-message"></div>
-            <input
-              type="text"
-              id="register-name"
-              name="name"
-              placeholder="Nome"
-              required
-            />
-            <input
-              type="email"
-              id="register-email"
-              name="email"
-              placeholder="E-mail"
-              required
-            />
-            <input
-              type="password"
-              id="register-password"
-              name="password"
-              placeholder="Senha"
-              required
-            />
+
+            <div class="form-control">
+              <label for="register-name">Nome</label>
+              <input
+                type="text"
+                id="register-name"
+                name="name"
+                placeholder="Seu nome completo"
+                required
+              />
+              <div class="error-message-inline" id="name-error"></div>
+            </div>
+
+            <div class="form-control">
+              <label for="register-email">E-mail</label>
+              <input
+                type="email"
+                id="register-email"
+                name="email"
+                placeholder="seu@email.com"
+                required
+              />
+              <div class="error-message-inline" id="email-error"></div>
+            </div>
+
+            <div class="form-control">
+              <label for="register-password">Senha</label>
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  placeholder="Mínimo 8 caracteres"
+                  required
+                />
+                <span
+                  class="password-toggle-icon"
+                  data-target="register-password"
+                >
+                </span>
+              </div>
+              <div class="error-message-inline" id="password-error"></div>
+            </div>
+
+            <div class="form-control">
+              <label for="register-password-confirm">Confirmar Senha</label>
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="register-password-confirm"
+                  name="passwordConfirm"
+                  placeholder="Repita sua senha"
+                  required
+                />
+                <span
+                  class="password-toggle-icon"
+                  data-target="register-password-confirm"
+                >
+                </span>
+              </div>
+              <div
+                class="error-message-inline"
+                id="password-confirm-error"
+              ></div>
+            </div>
+
             <button type="submit">Registrar</button>
           </form>
         </div>
