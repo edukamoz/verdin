@@ -11,11 +11,15 @@
     <div id="app">
       <div id="landing-view">
         <header class="landing-header">
-          <div class="logo-container">
-            <img src="/logo.svg" alt="Logo Verdin" class="logo-img" />
-            <span class="landing-brand-name">Verdin</span>
-          </div>
-          <a href="#/auth" class="btn btn-primary">Acessar Plataforma</a>
+          <a href="#/" class="logo-link">
+            <div class="logo-container">
+              <img src="/logo.svg" alt="Logo Verdin" class="logo-img" />
+              <span class="landing-brand-name">Verdin</span>
+            </div>
+          </a>
+          <a href="#/auth" id="header-cta-btn" class="btn btn-primary"
+            >Acessar Plataforma</a
+          >
         </header>
 
         <main class="landing-main">
@@ -177,10 +181,12 @@
 
       <div id="app-view" class="hidden">
         <header class="app-header">
-          <div class="logo-container">
-            <img src="/logo.svg" alt="Logo Verdin" class="logo-img" />
-            <h1>Verdin</h1>
-          </div>
+          <a href="#/" class="logo-link">
+            <div class="logo-container">
+              <img src="/logo.svg" alt="Logo Verdin" class="logo-img" />
+              <h1>Verdin</h1>
+            </div>
+          </a>
           <div class="header-buttons">
             <button id="logout-btn">Sair</button>
             <button id="delete-account-btn" class="danger-btn">

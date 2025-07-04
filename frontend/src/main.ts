@@ -10,6 +10,8 @@ const routes: { [key: string]: () => void | Promise<void> } = {
 };
 
 const router = () => {
+  ui.updateHeaderButton(auth.isLoggedIn());
+
   const path = window.location.hash || "#/";
 
   if (auth.isLoggedIn() && path === "#/auth") {

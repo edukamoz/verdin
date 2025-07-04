@@ -20,6 +20,8 @@ const landingView = document.querySelector<HTMLDivElement>("#landing-view")!;
 // Elementos principais da interface
 const authView = document.querySelector<HTMLDivElement>("#auth-view")!;
 const appView = document.querySelector<HTMLDivElement>("#app-view")!;
+const headerCtaBtn =
+  document.querySelector<HTMLAnchorElement>("#header-cta-btn")!;
 
 // Elementos da tabela de transações
 const transactionsTableBody = document.querySelector<HTMLTableSectionElement>(
@@ -271,4 +273,16 @@ export const closeDeleteConfirmModal = () => {
   deleteConfirmInput.value = ""; // Limpa o input
   finalDeleteBtn.disabled = true; // Desabilita o botão novamente
   deleteConfirmModal.classList.add("hidden");
+};
+
+export const updateHeaderButton = (isLoggedIn: boolean) => {
+  if (!headerCtaBtn) return; // Garante que o botão existe
+
+  if (isLoggedIn) {
+    headerCtaBtn.textContent = "Meu Dashboard";
+    headerCtaBtn.href = "#/dashboard";
+  } else {
+    headerCtaBtn.textContent = "Acessar Plataforma";
+    headerCtaBtn.href = "#/auth";
+  }
 };

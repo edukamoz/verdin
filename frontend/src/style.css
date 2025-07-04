@@ -297,6 +297,10 @@ section {
   width: 40px;
   height: 40px;
 }
+.logo-link {
+  text-decoration: none; /* Remove o sublinhado */
+  color: inherit; /* Faz o texto herdar a cor do elemento pai */
+}
 .auth-logo {
   justify-content: center;
   margin-bottom: 0.5rem;
