@@ -56,6 +56,8 @@ export const deleteTransaction = async (req: Request, res: Response) => {
 };
 
 export const updateTransaction = async (req: Request, res: Response) => {
+  console.log("BACKEND-Recebeu para UPDATE:", req.body);
+
   const { id } = req.params; // Pega o ID da transação da URL
   const userId = req.user!.id; // Pega o ID do usuário do token JWT
   const { description, amount, type, date } = req.body; // Pega os novos dados do corpo da requisição
