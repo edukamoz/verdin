@@ -33,27 +33,31 @@ router.use(protect);
  *         schema:
  *           type: string
  *           enum: [receita, despesa]
+ *         required: false
  *         description: Filtra por tipo de transação.
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
+ *         required: false
  *         description: Filtra por uma ou mais categorias (separadas por vírgula, ex: Lazer,Moradia).
  *       - in: query
  *         name: startDate
  *         schema:
  *           type: string
  *           format: date
+ *         required: false
  *         description: Data de início do período do filtro (YYYY-MM-DD).
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
+ *         required: false
  *         description: Data de fim do período do filtro (YYYY-MM-DD).
  *     responses:
  *       200:
- *         description: Lista de transações.
+ *         description: Lista de transações (filtrada ou não).
  *         content:
  *           application/json:
  *             schema:
@@ -63,16 +67,20 @@ router.use(protect);
  *                 properties:
  *                   id:
  *                     type: integer
+ *                   user_id:
+ *                     type: integer
  *                   description:
  *                     type: string
  *                   amount:
- *                     type: number
+ *                     type: string
  *                   type:
  *                     type: string
  *                     enum: [receita, despesa]
  *                   date:
  *                     type: string
  *                     format: date
+ *                   category:
+ *                     type: string
  *       401:
  *         description: Não autorizado (token inválido ou ausente).
  */
