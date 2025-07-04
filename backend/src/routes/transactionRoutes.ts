@@ -23,10 +23,34 @@ router.use(protect);
  * @swagger
  * /api/transactions:
  *   get:
- *     summary: Retorna todas as transações do usuário autenticado
+ *     summary: Retorna as transações do usuário, com filtros opcionais
  *     tags: [Transactions]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           enum: [receita, despesa]
+ *         description: Filtra por tipo de transação.
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filtra por uma ou mais categorias (separadas por vírgula, ex: Lazer,Moradia).
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Data de início do período do filtro (YYYY-MM-DD).
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Data de fim do período do filtro (YYYY-MM-DD).
  *     responses:
  *       200:
  *         description: Lista de transações.

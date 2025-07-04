@@ -3,13 +3,50 @@ import pool from "../config/db";
 import { Transaction } from "../types";
 
 export const getAllTransactions = async (req: Request, res: Response) => {
+  // Extrai os possíveis filtros da query string da URL
+  const { type, category, startDate, endDate } = req.query;
+  const userId = req.user!.id;
+
+  // Inicia a construção da nossa query SQL
+  let queryText = "SELECT * FROM transactions WHERE user_id = $1";
+  const queryParams: any[] = [userId];
+
+  let paramIndex = 2; // Começamos no $2, pois $1 já é o user_id
+
+  if (type && type !== "todos") {
+    queryText += ` AND type = $${paramIndex}`;
+    queryParams.push(type);
+    paramIndex++;
+  }
+
+  // Se a categoria for enviada (ex: "Lazer,Estudos"), transforma em um array
+  if (category && typeof category === "string") {
+    queryText += ` AND category = ANY($${paramIndex}::text[])`;
+    queryParams.push(category.split(","));
+    paramIndex++;
+  }
+
+  if (startDate) {
+    queryText += ` AND date >= $${paramIndex}`;
+    queryParams.push(startDate);
+    paramIndex++;
+  }
+
+  if (endDate) {
+    queryText += ` AND date <= $${paramIndex}`;
+    queryParams.push(endDate);
+    paramIndex++;
+  }
+
+  // Adiciona a ordenação no final
+  queryText += " ORDER BY date DESC";
+
   try {
-    const transactions = await pool.query(
-      "SELECT * FROM transactions WHERE user_id = $1 ORDER BY date DESC",
-      [req.user!.id]
-    );
-    res.json(transactions.rows);
-  } catch (error) {
+    console.log("Executando Query:", queryText, queryParams); // Log para depuração
+    const allTransactions = await pool.query(queryText, queryParams);
+    res.json(allTransactions.rows);
+  } catch (err) {
+    console.error("ERRO AO FILTRAR TRANSAÇÕES:", err);
     res.status(500).json({ message: "Erro no servidor" });
   }
 };
@@ -83,12 +120,10 @@ export const updateTransaction = async (req: Request, res: Response) => {
     );
 
     if (result.rowCount === 0) {
-      res
-        .status(404)
-        .json({
-          message:
-            "Transação não encontrada ou você não tem permissão para editá-la.",
-        });
+      res.status(404).json({
+        message:
+          "Transação não encontrada ou você não tem permissão para editá-la.",
+      });
       return;
     }
 
