@@ -58,11 +58,10 @@ export const deleteTransaction = async (req: Request, res: Response) => {
 export const updateTransaction = async (req: Request, res: Response) => {
   console.log("BACKEND-Recebeu para UPDATE:", req.body);
 
-  const { id } = req.params; // Pega o ID da transação da URL
-  const userId = req.user!.id; // Pega o ID do usuário do token JWT
-  const { description, amount, type, date } = req.body; // Pega os novos dados do corpo da requisição
+  const { id } = req.params;
+  const userId = req.user!.id;
+  const { description, amount, type, date, category } = req.body as Transaction;
 
-  // Validação simples para garantir que os dados necessários foram enviados
   if (!description || !amount || !type || !date) {
     return res
       .status(400)
@@ -70,26 +69,29 @@ export const updateTransaction = async (req: Request, res: Response) => {
   }
 
   try {
+    const finalCategory = type === "receita" ? null : category;
+
+    // --- AQUI ESTÁ A CORREÇÃO CRÍTICA ---
     const result = await pool.query(
+      // 1. Adicionamos "category = $5" na lista de campos a serem atualizados
       `UPDATE transactions 
-       SET description = $1, amount = $2, type = $3, date = $4 
-       WHERE id = $5 AND user_id = $6 
+       SET description = $1, amount = $2, type = $3, date = $4, category = $5 
+       WHERE id = $6 AND user_id = $7 
        RETURNING *`,
-      [description, amount, type, date, id, userId]
+      // 2. Adicionamos a variável "finalCategory" na posição correta ($5) da lista de parâmetros
+      [description, amount, type, date, finalCategory, id, userId]
     );
 
-    // A cláusula "AND user_id = $6" é uma camada CRUCIAL de segurança.
-    // Ela garante que um usuário só pode editar uma transação que lhe pertence.
-
-    // Se a consulta não afetou nenhuma linha, significa que a transação não existe ou não pertence ao usuário
     if (result.rowCount === 0) {
-      return res.status(404).json({
-        message:
-          "Transação não encontrada ou você não tem permissão para editá-la.",
-      });
+      res
+        .status(404)
+        .json({
+          message:
+            "Transação não encontrada ou você não tem permissão para editá-la.",
+        });
+      return;
     }
 
-    // Retorna a transação atualizada
     res.json(result.rows[0]);
   } catch (error) {
     console.error("ERRO AO ATUALIZAR TRANSAÇÃO:", error);
