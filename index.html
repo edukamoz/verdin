@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/verdin/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verdin - Seu Gestor Financeiro</title>
-    <script type="module" crossorigin src="/verdin/assets/index-D8RzrmRG.js"></script>
-    <link rel="stylesheet" crossorigin href="/verdin/assets/index-AY3TBFU2.css">
+    <script type="module" crossorigin src="/verdin/assets/index-BNGZdqax.js"></script>
+    <link rel="stylesheet" crossorigin href="/verdin/assets/index-Cjlr21tG.css">
   </head>
 
   <body>
@@ -538,6 +538,56 @@
           <div id="filter-category-container" class="filter-group hidden">
             <label>Categorias</label>
             <div id="category-filter-select"></div>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-description">Descrição</label>
+            <input
+              type="text"
+              id="filter-description"
+              name="description"
+              placeholder="Buscar por texto..."
+            />
+          </div>
+
+          <div class="filter-group">
+            <label>Valor</label>
+            <div class="range-filter-container">
+              <div class="range-input-group">
+                <span>Mín.</span>
+                <input
+                  type="number"
+                  name="minValue"
+                  id="min-value-input"
+                  min="0"
+                  placeholder="0"
+                />
+                <input
+                  type="range"
+                  id="min-value-range"
+                  min="0"
+                  max="1000"
+                  value="0"
+                />
+              </div>
+              <div class="range-input-group">
+                <span>Máx.</span>
+                <input
+                  type="number"
+                  name="maxValue"
+                  id="max-value-input"
+                  min="0"
+                  placeholder="1000"
+                />
+                <input
+                  type="range"
+                  id="max-value-range"
+                  min="0"
+                  max="1000"
+                  value="1000"
+                />
+              </div>
+            </div>
           </div>
 
           <div class="filter-group">
