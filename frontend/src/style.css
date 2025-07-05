@@ -797,3 +797,24 @@ select {
   color: var(--text-primary);
   font-weight: 600;
 }
+
+.range-filter-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.range-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.range-input-group span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Estiliza os inputs de número e range para ficarem alinhados */
+.range-input-group input[type="number"] {
+  margin-bottom: 0.5rem;
+}

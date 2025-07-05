@@ -539,6 +539,56 @@
           </div>
 
           <div class="filter-group">
+            <label for="filter-description">Descrição</label>
+            <input
+              type="text"
+              id="filter-description"
+              name="description"
+              placeholder="Buscar por texto..."
+            />
+          </div>
+
+          <div class="filter-group">
+            <label>Valor</label>
+            <div class="range-filter-container">
+              <div class="range-input-group">
+                <span>Mín.</span>
+                <input
+                  type="number"
+                  name="minValue"
+                  id="min-value-input"
+                  min="0"
+                  placeholder="0"
+                />
+                <input
+                  type="range"
+                  id="min-value-range"
+                  min="0"
+                  max="1000"
+                  value="0"
+                />
+              </div>
+              <div class="range-input-group">
+                <span>Máx.</span>
+                <input
+                  type="number"
+                  name="maxValue"
+                  id="max-value-input"
+                  min="0"
+                  placeholder="1000"
+                />
+                <input
+                  type="range"
+                  id="max-value-range"
+                  min="0"
+                  max="1000"
+                  value="1000"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-group">
             <label>Período</label>
             <div class="date-range-filter">
               <input type="date" name="startDate" />

@@ -104,6 +104,32 @@ const setupEventListeners = () => {
   const addTransactionModal = document.querySelector<HTMLDivElement>(
     "#add-transaction-modal"
   )!;
+  const minValueInput =
+    document.querySelector<HTMLInputElement>("#min-value-input")!;
+  const minValueRange =
+    document.querySelector<HTMLInputElement>("#min-value-range")!;
+  const maxValueInput =
+    document.querySelector<HTMLInputElement>("#max-value-input")!;
+  const maxValueRange =
+    document.querySelector<HTMLInputElement>("#max-value-range")!;
+
+  minValueInput.addEventListener(
+    "input",
+    () => (minValueRange.value = minValueInput.value)
+  );
+  minValueRange.addEventListener(
+    "input",
+    () => (minValueInput.value = minValueRange.value)
+  );
+
+  maxValueInput.addEventListener(
+    "input",
+    () => (maxValueRange.value = maxValueInput.value)
+  );
+  maxValueRange.addEventListener(
+    "input",
+    () => (maxValueInput.value = maxValueRange.value)
+  );
 
   if (typeSwitch) {
     typeSwitch.addEventListener("change", () => {
@@ -399,22 +425,32 @@ const setupEventListeners = () => {
   filterForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(filterForm);
+    const filters: any = {};
 
     const typeButton = document.querySelector(
       ".segmented-control button.active"
     );
     const type = typeButton?.getAttribute("data-value");
+    if (type && type !== "todos") filters.type = type;
 
     const selectedCategories = Array.from(formData.getAll("category")).join(
       ","
     );
+    if (selectedCategories) filters.category = selectedCategories;
 
-    const filters: any = {};
     if (type && type !== "todos") filters.type = type;
     if (selectedCategories) filters.category = selectedCategories;
     if (formData.get("startDate"))
       filters.startDate = formData.get("startDate");
     if (formData.get("endDate")) filters.endDate = formData.get("endDate");
+    const description = formData.get("description");
+    if (description) filters.description = description;
+
+    const minValue = formData.get("minValue");
+    if (minValue) filters.minValue = minValue;
+
+    const maxValue = formData.get("maxValue");
+    if (maxValue) filters.maxValue = maxValue;
 
     try {
       const transactions = await api.getTransactions(filters);
